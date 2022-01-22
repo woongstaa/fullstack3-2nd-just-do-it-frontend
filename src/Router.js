@@ -3,6 +3,7 @@ import Footer from './components/Footer';
 import Top from './components/Top';
 import TopNav from './components/TopNav';
 import Detail from './pages/Detail/Detail';
+import SignUp from './pages/Login/SignUp';
 import SnkrsList from './pages/SNKRS/SnkrsList';
 
 function Router() {
@@ -14,6 +15,7 @@ function Router() {
         <Route path="/" element={<TopNav />} />
         {/* <Route path="/" element={<Footer />} /> */}
         <Route path="/snkrs" element={<SnkrsList />} />
+        <Route path="/signup" element={<SignUp />} />
       </Routes>
     </BrowserRouter>
   );
