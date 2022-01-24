@@ -2,24 +2,28 @@ import styled from 'styled-components';
 import Footer from '../../components/Footer';
 import Top from '../../components/Top';
 import TopNav from '../../components/TopNav';
+import { REDIRECT_URI, REST_API_KEY } from '../../config';
+import { RiKakaoTalkFill } from 'react-icons/ri';
 
 function SignUp() {
+  const kauthUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
+
   return (
     <>
       <Top />
       <TopNav />
       <SignUpWrapper>
         <SnsSignUp>
-          <div>
+          <div className="snsWrapper">
             <h2>나이키 멤버 가입</h2>
             <div>멤버가 되어 나이키가 제공하는</div>
             <div className="secondRow">최고의 제품과 혜택을 만나보세요.</div>
-            <div>
-              <button>카카오</button>
-            </div>
-            <div>
-              <button>페이스북</button>
-            </div>
+            <a href={kauthUrl}>
+              <button className="kakao">
+                <RiKakaoTalkFill className="kakaoIcon" />
+                카카오톡 로그인
+              </button>
+            </a>
           </div>
         </SnsSignUp>
         <NormalSignUp>
@@ -55,8 +59,7 @@ function SignUp() {
 
 const SignUpWrapper = styled.div`
   box-sizing: border-box;
-  margin: 0 auto;
-  margin-top: 120px;
+  margin: 120px auto;
   text-align: center;
   font-family: ${props => props.theme.fontContent};
   width: 380px;
@@ -65,6 +68,8 @@ const SignUpWrapper = styled.div`
 
 const SnsSignUp = styled.div`
   margin-bottom: 20px;
+  width: 100%;
+
   h2 {
     font-weight: 700;
     font-size: 24px;
@@ -73,10 +78,33 @@ const SnsSignUp = styled.div`
 
   div {
     font-size: 16px;
-    padding: 3px;
 
     .secondRow {
+      margin-top: 5px;
       margin-bottom: 20px;
+    }
+  }
+
+  button {
+    width: 100%;
+    margin-bottom: 5px;
+    border: none;
+    padding: 10px;
+  }
+
+  a {
+    width: 100%;
+    margin-bottom: 10px;
+    border: none;
+
+    .kakao {
+      background-color: #feec34;
+
+      .kakaoIcon {
+        vertical-align: -10%;
+        margin-right: 10px;
+        font-size: 16px;
+      }
     }
   }
 `;

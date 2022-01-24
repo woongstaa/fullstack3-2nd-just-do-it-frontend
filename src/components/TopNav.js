@@ -47,8 +47,6 @@ function TopNav() {
 
   return (
     <>
-      {console.log(hide)}
-      {console.log(pageY)}
       {menModalOn ? <MenModal setMenModalOn={setMenModalOn} /> : null}
       {womenModalOn ? <WomenModal setWomenModalOn={setWomenModalOn} /> : null}
       {kidModalOn ? <KidModal setKidModalOn={setKidModalOn} /> : null}
