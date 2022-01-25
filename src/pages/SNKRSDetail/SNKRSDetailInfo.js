@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
+import { GrClose } from 'react-icons/gr';
 
 const SNKRSDetailInfos = styled.div`
   margin: 0 auto;
@@ -42,6 +43,10 @@ const SNKRSDetailInfos = styled.div`
     background: black;
     font-size: 16px;
     cursor: pointer;
+
+    &:hover {
+      background: gray;
+    }
   }
 `;
 
@@ -77,7 +82,7 @@ const ModalContainer = styled.div`
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  width: 50vw;
+  width: 30vw;
   height: 80%;
   max-height: 80%;
   padding: 16px;
@@ -86,13 +91,12 @@ const ModalContainer = styled.div`
   box-shadow: 0 0 10px rgb(0 0 0 / 30%);
   text-align: center;
 
-  button {
+  .SNKRSModalIcon {
     text-align: center;
-    font-size: 10px;
+    font-size: 20px;
     position: absolute;
-    top: 0.5rem;
-    right: 0.5rem;
-    width: 4rem;
+    top: 1.5rem;
+    right: 1.5rem;
     cursor: pointer;
   }
 `;
@@ -100,22 +104,74 @@ const ModalContainer = styled.div`
 const UserDataWrapper = styled.div`
   margin: 10px 0;
   border-bottom: 1px gray solid;
+
+  .winResult.active {
+    color: #c3a923;
+  }
+
+  .winResult {
+    color: #b74141;
+  }
 `;
 
 export default function SNKRSDetailInfo() {
   const [data, setData] = useState('');
   const [userData, setUserData] = useState([]);
   const [count, setCount] = useState(0);
+  const [size, setSize] = useState(0);
   const [openModal, setOpenModal] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
   useEffect(() => {
-    axios.get('data/snkrsdata.json').then(res => setData(res.data.data));
+    axios
+      .get(`${process.env.REACT_APP_BASE_URL}/product/detail/DAA-0001`)
+      .then(res => setData(res.data.data));
   }, []);
+  // useEffect(() => {
+  //   axios.get('data/snkrsuserdata.json').then(res => setUserData(res.data.data));
+  // }, []);
+
   useEffect(() => {
-    axios.get('data/snkrsuserdata.json').then(res => setUserData(res.data.data));
+    fetch(`${process.env.REACT_APP_BASE_URL}/snkrs`, {
+      method: 'POST',
+      mode: 'cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        user_id: 1,
+        style_code: `${data.style_code}`,
+        size: `${size}`,
+      }),
+    })
+      .then(res => res.json())
+      .then(res => {
+        if (res.err) {
+          setAlertMessage(res.err);
+        } else {
+          setAlertMessage('응모가 완료되었습니다');
+        }
+      });
   }, []);
+
+  // useEffect(() => {
+  //   fetch(`${process.env.REACT_APP_BASE_URL}/product/detail/DAA-0001`, {
+  //     method: 'GET',
+  //     mode: 'cors',
+  //     headers: { 'Content-Type': 'application/json' },
+  //   })
+  //     .then(res => res.json())
+  //     .then(res => {
+  //       if (res.err) {
+  //         setAlertMessage(res.err);
+  //       } else {
+  //         setAlertMessage('응모가 완료되었습니다');
+  //       }
+  //       // setData(res.data.data);
+  //     });
+  // }, []);
+
   const closeModal = () => {
     setOpenModal(false);
   };
+
   useEffect(() => {
     if (data.is_open !== 0) {
       setCount(count + 1);
@@ -123,19 +179,15 @@ export default function SNKRSDetailInfo() {
   }, []);
 
   const allowClick = () => {
-    if (data.is_open === 0 && count > 0) {
-      alert('no');
-    } else {
-      alert('hi');
-    }
+    size === 0 ? alert('no') : alert('hi');
   };
   return (
     <SNKRSDetailInfos>
       {openModal ? (
-        <ModalBackground onClick={closeModal}>
+        <ModalBackground onClick={() => closeModal()}>
           <ModalContainer onClick={e => e.stopPropagation()}>
             <div>추첨 결과</div>
-            <button onClick={closeModal}>나가기</button>
+            <GrClose className="SNKRSModalIcon" onClick={() => closeModal()} />
             {userData &&
               userData.map((obj, index) => {
                 return (
@@ -143,7 +195,9 @@ export default function SNKRSDetailInfo() {
                     <div>{index + 1}회차</div>
                     <div>{obj.name}</div>
                     <div>{obj.style_code}</div>
-                    <div>{obj.is_winner !== 0 ? '당첨' : '미당첨'}</div>
+                    <div className={obj.is_winner !== 0 ? 'winResult active' : 'winResult'}>
+                      {obj.is_winner !== 0 ? '당첨' : '미당첨'}
+                    </div>
                   </UserDataWrapper>
                 );
               })}
@@ -154,17 +208,21 @@ export default function SNKRSDetailInfo() {
       <SNKRSDetailInfosPrice>{data.price} 원</SNKRSDetailInfosPrice>
       <div>Description</div>
       <div>1월 23일 오전 9시 출시 예정</div>
-      <button onClick={() => setOpenModal(true)}>추첨 확인</button>
       <SizeSelection>
         <select>
           <option value="사이즈 선택">사이즈 선택</option>;
           {data.info &&
             data.info.map((obj, index) => {
-              return <option value={obj.size}>{obj.size}</option>;
+              return (
+                <option value={obj.size} onChange={() => setSize(obj.size)}>
+                  {obj.size}
+                </option>
+              );
             })}
         </select>
       </SizeSelection>
       <button onClick={() => allowClick()}>응모하기</button>
+      <button onClick={() => setOpenModal(true)}>추첨 확인</button>
     </SNKRSDetailInfos>
   );
 }

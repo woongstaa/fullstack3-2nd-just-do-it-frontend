@@ -1,0 +1,35 @@
+{
+  "message": "성공",
+  "data": {
+    "style_code": "CAA-0001",
+    "name": "나이키 헤이워드 2.0",
+    "category": "accssories",
+    "color": null,
+    "hex": null,
+    "gender": "남성",
+    "normal_price": "75000",
+    "sale_rate": null,
+    "sale_price": null,
+    "is_member": 0,
+    "shoes_type": null,
+    "brand": null,
+    "clothes_type": null,
+    "acc_type": "가방",
+    "img": [
+      {
+        "name": "/Images/Men/Accessories/Bag/1/1-1.png",
+        "is_main": 1
+      },
+      {
+        "name": "/Images/Men/Accessories/Bag/1/1-2.png",
+        "is_main": 0
+      }
+    ],
+    "info": [
+      {
+        "size": "FREE",
+        "quantity": 50
+      }
+    ]
+  }
+}
