@@ -6,6 +6,18 @@ const StyledDetailImg = styled.div`
   width: calc(100% - 449px);
   position: relative;
   padding: 0 10px;
+
+  .detailImgWrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+
+    column-gap: 10px;
+  }
+  .detailImgWrapper.active {
+    display: flex;
+    flex-direction: column;
+  }
 `;
 
 const Wrapper = styled.section`
@@ -27,35 +39,45 @@ const List = styled.li`
 `;
 
 const ImgWrapper = styled.div`
-  position: relative;
+  display: flex;
+  justify-content: center;
   width: 100%;
 
   img {
-    width: 100%;
     background: #f2f2f2;
   }
 `;
 
 export default function DetailImg() {
   const [mockdata, setMockdata] = useState([]);
+  const [acc, setAcc] = useState(false);
   useEffect(() => {
-    axios.get('data/shoedata.json').then(res => setMockdata(res.data.data.img));
+    axios
+      .get(`${process.env.REACT_APP_BASE_URL}/product/detail/AAA-0001`)
+      .then(res => setMockdata(res.data.data.img));
   }, []);
+  useEffect(() => {
+    if (mockdata.length === 2) {
+      setAcc(true);
+    } else {
+      setAcc(false);
+    }
+  }, [mockdata]);
 
   return (
     <StyledDetailImg>
-      <Wrapper>
+      <div className={acc ? 'detailImgWrapper active' : 'detailImgWrapper'}>
         {mockdata &&
           mockdata.map(obj => {
             return (
-              <List key={obj.name}>
+              <List key={obj.url}>
                 <ImgWrapper>
-                  <img src={obj.name} alt={obj.name} />
+                  <img src={obj.url} alt={obj.url} style={{ width: acc ? '50%' : '100%' }} />
                 </ImgWrapper>
               </List>
             );
           })}
-      </Wrapper>
+      </div>
     </StyledDetailImg>
   );
 }

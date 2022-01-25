@@ -39,7 +39,9 @@ const ImgWrapper = styled.div`
 export default function DetailImg() {
   const [mockdata, setMockdata] = useState([]);
   useEffect(() => {
-    axios.get('data/snkrsdata.json').then(res => setMockdata(res.data.data.img));
+    axios
+      .get(`${process.env.REACT_APP_BASE_URL}/product/detail/DAA-0001`)
+      .then(res => setMockdata(res.data.data.img));
   }, []);
 
   return (
@@ -48,9 +50,9 @@ export default function DetailImg() {
         {mockdata &&
           mockdata.map(obj => {
             return (
-              <List key={obj.name}>
+              <List key={obj.url}>
                 <ImgWrapper>
-                  <img src={obj.name} alt={obj.name} />
+                  <img src={obj.url} alt={obj.url} />
                 </ImgWrapper>
               </List>
             );
