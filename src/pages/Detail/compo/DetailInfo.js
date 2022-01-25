@@ -1,8 +1,12 @@
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import axios from 'axios';
 import { GrFormClose } from 'react-icons/gr';
+import StarRating from './StarRating';
+import StarRatings from 'react-star-ratings';
+
 const DetailInfos = styled.div`
   width: 450px;
   padding: 0 54px 0 10px;
@@ -195,22 +199,34 @@ const ReviewBox = styled.div`
 `;
 
 const ReviewHeader = styled.div`
-  h1 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  h5 {
     display: inline;
+    font-size: 20px;
   }
-  span,
-  button {
-    float: right;
-    margin-left: 5px;
+  .reviewRight {
+    span,
+    button {
+      margin-left: 7px;
+    }
   }
 `;
 
 const ReviewContent = styled.div`
+  display: flex;
+  justify-content: space-between;
   font-size: 20px;
   padding-top: ${props => (props.visible !== false ? '30px' : 0)};
   opacity: ${props => (props.visible !== false ? 1 : 0)};
-  height: ${props => (props.visible !== false ? '50px' : '0px')};
+  height: ${props => (props.visible !== false ? '30px' : '0px')};
   transition: all 0.5s;
+
+  button {
+    display: inline-block;
+    height: 30px;
+  }
 `;
 
 const SideCart = styled.nav`
@@ -341,7 +357,7 @@ const SideCartBottomPurchase = styled.button`
 const DeleteAllCart = styled.span`
   position: absolute;
   top: 44px;
-  right: 40px;
+  right: 30px;
 
   button {
     display: inline-block;
@@ -353,25 +369,30 @@ export default function DetailInfo() {
   const [quantity, setQuantity] = useState(1);
   const [size, setSize] = useState(0);
   const [deleteOk, setDeleteOk] = useState(1);
-  // const userId = localStorage.getItem('token');
+  const params = useParams();
+  const userId = localStorage.getItem('token');
   const [visible, setVisible] = useState(false);
   const [sidebar, setSidebar] = useState(false);
   const [data, setData] = useState([]);
   const [clicked, setClicked] = useState(false);
   const [addCart, setAddCart] = useState(false);
-  const [quantityArr, setQuantityArr] = useState([]);
+  const [member, setMember] = useState(0);
+  const [cartIndex, setCartIndex] = useState(0);
 
   useEffect(() => {
     axios
-      .get(`${process.env.REACT_APP_BASE_URL}/product/detail/AAA-0001`)
+      .get(`${process.env.REACT_APP_BASE_URL}/product/detail/${params.styleCode}`)
       .then(res => setData(res.data.data));
   }, []);
 
   useEffect(() => {
-    fetch(`${process.env.REACT_APP_BASE_URL}/cart/1`, {
-      method: 'GET',
+    fetch(`${process.env.REACT_APP_BASE_URL}/cart/list`, {
+      method: 'POST',
       mode: 'cors',
       headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        user_id: `${userId}`,
+      }),
     })
       .then(res => res.json())
       .then(res => {
@@ -379,9 +400,9 @@ export default function DetailInfo() {
           setAddCart(res.result);
         }
       });
-  }, [deleteOk]);
+  }, [deleteOk, userId]);
 
-  const deleteCart = (style_code, size, user_id) => {
+  const deleteCart = (userId, cart_id) => {
     fetch(`${process.env.REACT_APP_BASE_URL}/cart`, {
       method: 'delete',
       mode: 'cors',
@@ -389,9 +410,8 @@ export default function DetailInfo() {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        user_id: 1,
-        style_code: `${style_code}`,
-        size: `${size}`,
+        user_id: `${userId}`,
+        cart_id: cart_id,
       }),
     }).then(() => {
       setDeleteOk(deleteOk + 1);
@@ -406,17 +426,17 @@ export default function DetailInfo() {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        user_id: 1,
+        user_id: `${userId}`,
       }),
     }).then(() => {
-      setDeleteOk(deleteOk + 1);
+      setDeleteOk(prev => prev + 1);
     });
   };
 
   const showSidebar = () => {
     if (activeIndex !== 0) {
-      sendCartData();
       setSidebar(prev => !prev);
+      sendCartData();
     } else {
       setSidebar(false);
       setClicked(prev => !prev);
@@ -434,7 +454,7 @@ export default function DetailInfo() {
       mode: 'cors',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        user_id: 1,
+        user_id: `${userId}`,
         quantity: quantity,
         style_code: `${data.style_code}`,
         size: `${size}`,
@@ -447,17 +467,21 @@ export default function DetailInfo() {
         }
       });
   };
+  console.log('data :', data);
+  console.log('addCart :', addCart);
 
   const totalPrice = () => {
     let result = 0;
-    let total =
-      data &&
-      data.map((obj, i) => {
-        return Math.round(obj.normal_price * quantityArr[i]);
+    const total =
+      addCart &&
+      addCart.map((obj, i) => {
+        result += Math.round(
+          obj.sale_price ? obj.sale_price * obj.quantity : obj.normal_price * obj.quantity
+        );
       });
-    for (let i = 0; i < total.length; i++) {
-      result += total[i];
-    }
+    // for (let i = 0; i < total.length; i++) {
+    //   result += total[i];
+    // }
     return result;
   };
 
@@ -537,27 +561,40 @@ export default function DetailInfo() {
       </ProductDescription>
       <ReviewBox>
         <ReviewHeader>
-          <h1>리뷰</h1>
-          <button
-            onClick={() => {
-              setVisible(!visible);
-            }}
-          >
-            내려오기
-          </button>
-          <span>별점</span>
+          <h5>리뷰</h5>
+          <span className="reviewRight">
+            <span>
+              <StarRatings
+                rating={2.4}
+                starDimension="30px"
+                starSpacing="0px"
+                starRatedColor="#ffc107"
+                starEmptyColor="black"
+              />
+            </span>
+            <button
+              onClick={() => {
+                setVisible(!visible);
+              }}
+            >
+              내려오기
+            </button>
+          </span>
         </ReviewHeader>
         <ReviewContent visible={visible}>
-          <div>리뷰 작성하는 곳</div>
+          <StarRating />
           <button>리뷰 제출</button>
         </ReviewContent>
       </ReviewBox>
       <SideCart>
-        <span className={sidebar ? 'backBlur active' : 'backBlur'} onClick={showSidebar} />
+        <span
+          className={sidebar ? 'backBlur active' : 'backBlur'}
+          onClick={() => setSidebar(false)}
+        />
         <nav className={sidebar ? 'sideCart active' : 'sideCart'}>
           <SideCartTitle>미니 장바구니</SideCartTitle>
           <DeleteAllCart>
-            <button onClick={deleteAllCart}>전체 삭제</button>
+            <button onClick={() => deleteAllCart()}>전체 삭제</button>
           </DeleteAllCart>
           <SideCartList>
             {addCart &&
@@ -578,7 +615,7 @@ export default function DetailInfo() {
                     </SideCartListInfo>
                     <GrFormClose
                       className="SideCartIcon"
-                      onClick={() => deleteCart(obj.style_code, obj.size, 1)}
+                      onClick={() => deleteCart(userId, obj.id)}
                     />
                   </li>
                 );
@@ -586,14 +623,7 @@ export default function DetailInfo() {
           </SideCartList>
           <SideCartTotalPrice>
             <span>총 상품금액</span>
-            {/* <div>{sidebar ? totalPrice() : null}</div> */}
-            <div>전체 가격</div>
-            {/* {addCart &&
-              addCart.map(obj, index => {
-                const result = 0;
-                obj.sale_price ? (result += obj.sale_price) : (result += obj.normal_price);
-                return result;
-              })} */}
+            <div>{totalPrice()} 원</div>
           </SideCartTotalPrice>
           <SideCartBottom>
             <div>배송비는 주문서에서 확인 가능합니다</div>

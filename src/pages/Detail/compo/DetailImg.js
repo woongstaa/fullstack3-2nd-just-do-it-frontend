@@ -1,5 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 const StyledDetailImg = styled.div`
@@ -51,9 +52,10 @@ const ImgWrapper = styled.div`
 export default function DetailImg() {
   const [mockdata, setMockdata] = useState([]);
   const [acc, setAcc] = useState(false);
+  const params = useParams();
   useEffect(() => {
     axios
-      .get(`${process.env.REACT_APP_BASE_URL}/product/detail/AAA-0001`)
+      .get(`${process.env.REACT_APP_BASE_URL}/product/detail/${params.styleCode}`)
       .then(res => setMockdata(res.data.data.img));
   }, []);
   useEffect(() => {
