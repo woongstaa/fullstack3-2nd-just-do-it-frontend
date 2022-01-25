@@ -179,7 +179,7 @@ export default function SNKRSDetailInfo() {
   }, []);
 
   const allowClick = () => {
-    size === 0 ? alert('no') : alert('hi');
+    size === 0 ? alert('no') : alert('yes');
   };
   return (
     <SNKRSDetailInfos>
