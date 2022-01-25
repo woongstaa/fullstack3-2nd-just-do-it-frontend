@@ -8,14 +8,19 @@ import ListFilterCard from './ListFilterCard';
 import { useEffect, useState } from 'react';
 import { GET_LIST_API } from '../../config';
 import axios from 'axios';
+import { useParams } from 'react-router-dom';
 
 function List() {
   const [filter, setFilter] = useState(false);
   const [listData, setListData] = useState([]);
 
+  const params = useParams();
+
+  const URL = new URLSearchParams(params);
   useEffect(() => {
     axios({
-      url: GET_LIST_API,
+      // `${GET_LIST_API}?genderId=${params.genderId}&categoryId=${params.categoryId}&size=${params.size}&colorId=${params.colorId}&subBrandName=${params.subBrandName}&subIconName=${params.subIconName}&subClothesName=${params.subClothesName}&subAccessoriesName=${params.subAccessoriesName}`,
+      url: `${GET_LIST_API}`,
       method: 'GET',
     }).then(response => {
       setListData(response.data.list);
@@ -33,6 +38,7 @@ function List() {
 
   return (
     <>
+      {console.log(URL)}
       <Top />
       <TopNav />
       <ListWrapper>

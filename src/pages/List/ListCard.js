@@ -26,9 +26,9 @@ function ListCard({
       <div className="cardWrapper" key={key}>
         {!isMember ? (
           <div className="imgWrapper">
-            {/* <Link to="/styleId"> */}
-            <img alt={productName} src={imgUrl} />
-            {/* </Link> */}
+            <Link to={`/detail?styleCode=${styleCode}`}>
+              <img alt={productName} src={imgUrl} />
+            </Link>
           </div>
         ) : (
           <div
@@ -36,18 +36,18 @@ function ListCard({
             onMouseEnter={() => setMouse(true)}
             onMouseLeave={() => setMouse(false)}
           >
-            {/* <Link to="/styleId"> */}
-            <div className="white" style={mouse ? { display: 'block' } : { display: 'none' }}>
-              <div className="comment">
-                나이키 멤버만
-                <br /> 구매가능한 제품입니다
+            <Link to={`/detail?styleCode=${styleCode}`}>
+              <div className="white" style={mouse ? { display: 'block' } : { display: 'none' }}>
+                <div className="comment">
+                  나이키 멤버만
+                  <br /> 구매가능한 제품입니다
+                </div>
               </div>
-            </div>
-            <button>
-              <IoIosLock className="icon" />
-            </button>
-            <img alt={productName} src={imgUrl} />
-            {/* </Link> */}
+              <button>
+                <IoIosLock className="icon" />
+              </button>
+              <img alt={productName} src={imgUrl} />
+            </Link>
           </div>
         )}
         <div className="detailWrapper">
@@ -79,6 +79,11 @@ function ListCard({
 }
 
 const ListCardWrapper = styled.div`
+  a {
+    margin: 0;
+    padding: 0;
+  }
+
   .cardWrapper {
     display: flex;
     flex-direction: column;
@@ -114,6 +119,7 @@ const ListCardWrapper = styled.div`
       .white {
         position: absolute;
         background: rgba(255, 255, 255, 0.9);
+        top: 0;
         z-index: 30;
         width: 100%;
         height: 100%;
