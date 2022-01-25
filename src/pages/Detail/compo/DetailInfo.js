@@ -1,9 +1,8 @@
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import cartData from './ProductCart';
 import axios from 'axios';
-
+import { GrFormClose } from 'react-icons/gr';
 const DetailInfos = styled.div`
   width: 450px;
   padding: 0 54px 0 10px;
@@ -72,7 +71,7 @@ const ProductSizeTableList = styled.div`
   .sizeButton {
     position: relative;
     text-align: center;
-    font-size: 20px;
+    font-size: 16px;
     width: calc(20% - 5px);
     height: 48px;
     line-height: 48px;
@@ -91,7 +90,7 @@ const ProductSizeTableList = styled.div`
   .sizeButton-clicked {
     position: relative;
     text-align: center;
-    font-size: 20px;
+    font-size: 16px;
     width: calc(20% - 5px);
     height: 48px;
     line-height: 48px;
@@ -235,7 +234,6 @@ const SideCart = styled.nav`
     background-color: white;
     padding: 30px;
     width: 400px;
-    height: 100vh;
     top: 0;
     right: -100%;
     transition: 850ms;
@@ -243,9 +241,9 @@ const SideCart = styled.nav`
   }
   .sideCart.active {
     opacity: 1;
-    height: 100%;
     right: 0;
     transition: 350ms;
+    min-height: 100vh;
   }
 `;
 
@@ -263,9 +261,15 @@ const SideCartList = styled.ul`
     align-items: flex-start;
 
     img {
+      margin-top: 20px;
       width: 100px;
-      height: 100px;
       margin-right: 5px;
+    }
+
+    .SideCartIcon {
+      cursor: pointer;
+      position: absolute;
+      right: 25px;
     }
   }
 `;
@@ -334,32 +338,128 @@ const SideCartBottomPurchase = styled.button`
   border: transparent;
 `;
 
-const menSizeArr = [250, 255, 260, 265, 270, 275, 280, 285, 290, 295, 300];
+const DeleteAllCart = styled.span`
+  position: absolute;
+  top: 44px;
+  right: 40px;
+
+  button {
+    display: inline-block;
+  }
+`;
 
 export default function DetailInfo() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [quantity, setQuantity] = useState(1);
+  const [size, setSize] = useState(0);
+  const [deleteOk, setDeleteOk] = useState(1);
+  // const userId = localStorage.getItem('token');
   const [visible, setVisible] = useState(false);
   const [sidebar, setSidebar] = useState(false);
-  const [data, setData] = useState('');
+  const [data, setData] = useState([]);
   const [clicked, setClicked] = useState(false);
+  const [addCart, setAddCart] = useState(false);
+  const [quantityArr, setQuantityArr] = useState([]);
+
   useEffect(() => {
-    axios.get('data/shoedata.json').then(res => setData(res.data.data));
+    axios
+      .get(`${process.env.REACT_APP_BASE_URL}/product/detail/AAA-0001`)
+      .then(res => setData(res.data.data));
   }, []);
+
+  useEffect(() => {
+    fetch(`${process.env.REACT_APP_BASE_URL}/cart/1`, {
+      method: 'GET',
+      mode: 'cors',
+      headers: { 'Content-Type': 'application/json' },
+    })
+      .then(res => res.json())
+      .then(res => {
+        if (res.message === '성공') {
+          setAddCart(res.result);
+        }
+      });
+  }, [deleteOk]);
+
+  const deleteCart = (style_code, size, user_id) => {
+    fetch(`${process.env.REACT_APP_BASE_URL}/cart`, {
+      method: 'delete',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        user_id: 1,
+        style_code: `${style_code}`,
+        size: `${size}`,
+      }),
+    }).then(() => {
+      setDeleteOk(deleteOk + 1);
+    });
+  };
+
+  const deleteAllCart = () => {
+    fetch(`${process.env.REACT_APP_BASE_URL}/cart`, {
+      method: 'delete',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        user_id: 1,
+      }),
+    }).then(() => {
+      setDeleteOk(deleteOk + 1);
+    });
+  };
+
   const showSidebar = () => {
     if (activeIndex !== 0) {
-      setSidebar(!sidebar);
+      sendCartData();
+      setSidebar(prev => !prev);
     } else {
       setSidebar(false);
-      setClicked(!clicked);
+      setClicked(prev => !prev);
     }
   };
-  const handleOnClick = index => {
+
+  const handleOnClick = (index, obj) => {
     setActiveIndex(index);
+    setSize(obj);
   };
-  // const buttonClick = () => {
-  //   clicked ? set
-  // }
+
+  const sendCartData = () => {
+    fetch(`${process.env.REACT_APP_BASE_URL}/cart`, {
+      method: 'POST',
+      mode: 'cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        user_id: 1,
+        quantity: quantity,
+        style_code: `${data.style_code}`,
+        size: `${size}`,
+      }),
+    })
+      .then(res => res.json())
+      .then(res => {
+        if (res.message === '성공') {
+          setAddCart(res.result);
+        }
+      });
+  };
+
+  const totalPrice = () => {
+    let result = 0;
+    let total =
+      data &&
+      data.map((obj, i) => {
+        return Math.round(obj.normal_price * quantityArr[i]);
+      });
+    for (let i = 0; i < total.length; i++) {
+      result += total[i];
+    }
+    return result;
+  };
 
   return (
     <DetailInfos>
@@ -393,7 +493,7 @@ export default function DetailInfo() {
             return (
               <button
                 key={obj.size}
-                onClick={() => handleOnClick(index + 1)}
+                onClick={() => handleOnClick(index + 1, obj.size)}
                 className={activeIndex === index + 1 ? 'sizeButton-clicked' : 'sizeButton'}
                 disabled={obj.quantity === 0 ? true : false}
               >
@@ -429,11 +529,11 @@ export default function DetailInfo() {
       </ProductQuantity>
       <PurchaseButtons>
         <OrderButton>바로구매</OrderButton>
-        <CartButton onClick={showSidebar}>장바구니</CartButton>
+        <CartButton onClick={() => showSidebar()}>장바구니</CartButton>
         <WishlistButton>위시리스트</WishlistButton>
       </PurchaseButtons>
       <ProductDescription>
-        <h3>백신 맞은 사람만 신을 수 있는 카이리 신발</h3>
+        <h3>나이키를 이용해주셔서 감사합니다!</h3>
       </ProductDescription>
       <ReviewBox>
         <ReviewHeader>
@@ -456,26 +556,44 @@ export default function DetailInfo() {
         <span className={sidebar ? 'backBlur active' : 'backBlur'} onClick={showSidebar} />
         <nav className={sidebar ? 'sideCart active' : 'sideCart'}>
           <SideCartTitle>미니 장바구니</SideCartTitle>
+          <DeleteAllCart>
+            <button onClick={deleteAllCart}>전체 삭제</button>
+          </DeleteAllCart>
           <SideCartList>
-            {cartData &&
-              cartData.map(obj => {
+            {addCart &&
+              addCart.map(obj => {
                 return (
-                  <li key={obj.style}>
-                    <img src={obj.img} alt={obj.title} />
+                  <li key={obj.id}>
+                    <img src={obj.url} alt={obj.url} />
                     <SideCartListInfo>
                       <SideCartListProductName>{obj.name}</SideCartListProductName>
-                      <div>스타일 : {obj.style}</div>
+                      <div>스타일 : {obj.style_code}</div>
                       <div>사이즈 : {obj.size}</div>
                       <div>수량 : {obj.quantity}</div>
-                      <CartProductPrice>{obj.price}</CartProductPrice>
+                      {obj.sale_price ? (
+                        <CartProductPrice>{obj.sale_price} 원</CartProductPrice>
+                      ) : (
+                        <CartProductPrice>{obj.normal_price} 원</CartProductPrice>
+                      )}
                     </SideCartListInfo>
+                    <GrFormClose
+                      className="SideCartIcon"
+                      onClick={() => deleteCart(obj.style_code, obj.size, 1)}
+                    />
                   </li>
                 );
               })}
           </SideCartList>
           <SideCartTotalPrice>
             <span>총 상품금액</span>
-            <div>130000원</div>
+            {/* <div>{sidebar ? totalPrice() : null}</div> */}
+            <div>전체 가격</div>
+            {/* {addCart &&
+              addCart.map(obj, index => {
+                const result = 0;
+                obj.sale_price ? (result += obj.sale_price) : (result += obj.normal_price);
+                return result;
+              })} */}
           </SideCartTotalPrice>
           <SideCartBottom>
             <div>배송비는 주문서에서 확인 가능합니다</div>
