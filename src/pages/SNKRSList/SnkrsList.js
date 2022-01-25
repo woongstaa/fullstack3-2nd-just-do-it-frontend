@@ -3,87 +3,115 @@ import styled from 'styled-components';
 import { FaShoppingCart, FaMapMarker } from 'react-icons/fa';
 import { BsFillGridFill, BsFillGrid3X3GapFill } from 'react-icons/bs';
 import { IoChevronBackOutline } from 'react-icons/io5';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import SignIn from '../Login/SignIn';
+import axios from 'axios';
+import { GET_SNKRS_LIST_API } from '../../config';
+import SnkrsListCard from './SnkrsListCard';
 
 function SnkrsList() {
   const [grid, setGrid] = useState(true);
   const [btnActive, setBtnActive] = useState(false);
+  const [modal, setModal] = useState(false);
+  const [listData, setListData] = useState([]);
+
+  useEffect(() => {
+    axios({
+      url: GET_SNKRS_LIST_API,
+      method: 'GET',
+    }).then(response => {
+      setListData(response.data.list);
+    });
+  }, []);
 
   return (
-    <ListWrapper>
-      <ListHeader>
-        <div className="firstHead">
-          <Link to="/">
-            <div>
-              <span>
-                <IoChevronBackOutline className="icon" />
-              </span>
-              Visit Nike.com
-            </div>
-          </Link>
-          <div className="firstRight">
-            <div className="rightRight">회원가입 / 로그인</div>
-            <div className="rightRight">고객센터</div>
-            <span>
-              <FaShoppingCart className="iconRight" />
-            </span>
-            <div>
-              <span>
-                <FaMapMarker className="iconRight" />
-              </span>
-              대한민국
-            </div>
-          </div>
-        </div>
-        <div className="secondHead">
-          <img src="/images/snkrs.png" alt="snkrs" />
-          <div className="secondCenter">
-            <div className="centerMenu">Feed</div>
-            <div className="centerMenu">In stock</div>
-            <div className="centerMenu">Upcoming</div>
-          </div>
-          <div onClick={() => setGrid(!grid)}>
-            {grid ? <BsFillGridFill className="icon" /> : <BsFillGrid3X3GapFill className="icon" />}
-          </div>
-        </div>
-      </ListHeader>
-      <ListBody>
-        <div className={grid ? 'listCard' : 'changedListCard'}>
-          {mock.map(element => {
-            return (
-              <div
-                className="cardWrapper"
-                key={element.id}
-                onMouseEnter={() => setBtnActive(true)}
-                onMouseLeave={() => setBtnActive(false)}
-              >
-                <Link to="#">
-                  <div className="imgWrapper">
-                    <img src={element.imgUrl} alt={element.productName} />
-                  </div>
-                  {/* {btnActive ? (
-                    <div className="btnWrapper">
-                      <button>Draw</button>
-                    </div>
-                  ) : (
-                    <div className="nameWrapper">
-                      <div className="cateName">{element.productCate}</div>
-                      <div className="itemName">{element.productName}</div>
-                    </div>
-                  )} */}
-                  <div className="nameWrapper">
-                    <div className="cateName">{element.productCate}</div>
-                    <div className="itemName">{element.productName}</div>
-                  </div>
-                </Link>
+    <>
+      {modal && <SignIn modal={modal} setModal={setModal} />}
+      <ListWrapper>
+        <ListHeader>
+          <div className="firstHead">
+            <Link to="/">
+              <div>
+                <span>
+                  <IoChevronBackOutline className="icon" />
+                </span>
+                Visit Nike.com
               </div>
+            </Link>
+            <div className="firstRight">
+              <div className="rightRight">
+                <Link to="/signup">회원가입</Link>
+                <div className="center">/</div>
+                <div onClick={() => setModal(true)}>로그인</div>
+              </div>
+              <div className="rightRight">고객센터</div>
+              <span>
+                <FaShoppingCart className="iconRight" />
+              </span>
+              <div>
+                <span>
+                  <FaMapMarker className="iconRight" />
+                </span>
+                대한민국
+              </div>
+            </div>
+          </div>
+          <div className="secondHead">
+            <img src="/images/snkrs.png" alt="snkrs" />
+            <div className="secondCenter">
+              <div className="centerMenu">Feed</div>
+              <div className="centerMenu">In stock</div>
+              <div className="centerMenu">Upcoming</div>
+            </div>
+            <div onClick={() => setGrid(!grid)}>
+              {grid ? (
+                <BsFillGridFill className="icon" />
+              ) : (
+                <BsFillGrid3X3GapFill className="icon" />
+              )}
+            </div>
+          </div>
+        </ListHeader>
+        <ListBody>
+          <div className={grid ? 'listCard' : 'changedListCard'}>
+            {listData.map((e, i) => {
+              return (
+                <div
+                  className="cardWrapper"
+                  key={i}
+                  onMouseEnter={() => setBtnActive(true)}
+                  onMouseLeave={() => setBtnActive(false)}
+                >
+                  <Link to="#">
+                    <div className="imgWrapper">
+                      <img src={e.imgUrl} alt={e.snkrsName} />
+                    </div>
+                    <div className="nameWrapper">
+                      {e.is_open ? <div className="draw">Draw!</div> : <div>Commig soon</div>}
+                      <div className="itemName">{e.snkrsName}</div>
+                    </div>
+                  </Link>
+                </div>
+              );
+            })}
+          </div>
+          {/* {listData.map((element, index) => {
+            return (
+              <SnkrsListCard
+                key={index}
+                snkrsName={element.snkrsName}
+                imgUrl={element.imgUrl}
+                isOpen={element.isOpen}
+                setBtnActive={setBtnActive}
+                grid={grid}
+              />
             );
-          })}
-        </div>
-      </ListBody>
-      <Footer />
-    </ListWrapper>
+          })} */}
+        </ListBody>
+        <Footer />
+      </ListWrapper>
+    </>
   );
 }
 
@@ -116,7 +144,13 @@ const ListHeader = styled.div`
       display: flex;
 
       .rightRight {
+        display: flex;
         padding-right: 10px;
+        cursor: pointer;
+
+        .center {
+          margin: 0 5px;
+        }
       }
 
       .iconRight {
@@ -149,6 +183,7 @@ const ListHeader = styled.div`
 
     .icon {
       font-size: 20px;
+      cursor: pointer;
     }
   }
 
@@ -158,6 +193,7 @@ const ListHeader = styled.div`
     }
   }
 `;
+
 const ListBody = styled.div`
   box-sizing: border-box;
   font-family: ${props => props.theme.fontContent};
@@ -167,13 +203,19 @@ const ListBody = styled.div`
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     grid-gap: 15px;
+    margin-top: 20px;
     width: 100%;
 
     .cardWrapper {
       .imgWrapper {
+        height: 500px;
+        width: 100%;
+        overflow: hidden;
         display: flex;
         justify-content: center;
-        overflow: hidden;
+        align-items: center;
+        background-color: #efefef;
+        cursor: pointer;
 
         img {
           width: 100%;
@@ -183,6 +225,11 @@ const ListBody = styled.div`
       .nameWrapper {
         text-align: center;
         padding: 30px;
+
+        .draw {
+          font-weight: 700;
+          color: red;
+        }
 
         .itemName {
           padding-top: 10px;
@@ -197,13 +244,19 @@ const ListBody = styled.div`
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
     grid-gap: 15px;
+    margin: 20px 0;
     width: 100%;
 
     .cardWrapper {
       .imgWrapper {
+        height: 250px;
+        width: 100%;
+        overflow: hidden;
         display: flex;
         justify-content: center;
-        overflow: hidden;
+        align-items: center;
+        background-color: #efefef;
+        cursor: pointer;
 
         img {
           width: 100%;
