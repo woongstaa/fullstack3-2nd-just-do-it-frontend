@@ -2,6 +2,108 @@ import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 import { GrClose } from 'react-icons/gr';
+import { useParams } from 'react-router-dom';
+export default function SNKRSDetailInfo() {
+  const [data, setData] = useState('');
+  const [userData, setUserData] = useState();
+  const [size, setSize] = useState(0);
+  const [openModal, setOpenModal] = useState(false);
+
+  const params = useParams();
+
+  const userId = localStorage.getItem('token');
+
+  useEffect(() => {
+    axios
+      .get(`${process.env.REACT_APP_BASE_URL}/snkrs/detail/${params.styleCode}`)
+      .then(res => setData(res.data.data));
+  }, []);
+
+  const draw = () => {
+    if (size === 0 || size === '사이즈 선택') {
+      return alert('신발 사이즈를 선택해주세요!');
+    } else if (!data.is_open) {
+      return alert('Draw 시간이 아닙니다!');
+    } else if (size !== '사이즈 선택' && data.is_open) {
+      fetch(`${process.env.REACT_APP_BASE_URL}/snkrs`, {
+        method: 'POST',
+        mode: 'cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          user_id: userId,
+          style_code: `${data.style_code}`,
+          size: `${size}`,
+        }),
+      }).then(res => res.json());
+      alert('응모가 완료되었습니다');
+    }
+  };
+
+  const closeModal = () => {
+    setOpenModal(false);
+  };
+
+  const pickValue = e => {
+    setSize(e.target.value);
+  };
+
+  useEffect(() => {
+    axios
+      .get(`${process.env.REACT_APP_BASE_URL}/snkrs`, {
+        user_id: userId,
+        style_code: params.styleCode,
+      })
+      .then(res => setUserData(res.data));
+  }, []);
+
+  return (
+    <SNKRSDetailInfos>
+      {console.log(userId)}
+      {console.log(params.styleCode)}
+      {openModal ? ( // 모달 창
+        <ModalBackground onClick={() => closeModal()}>
+          <ModalContainer onClick={e => e.stopPropagation()}>
+            <div>추첨 결과</div>
+            <GrClose className="SNKRSModalIcon" onClick={() => closeModal()} />
+            {userData &&
+              userData.map((obj, index) => {
+                return (
+                  <UserDataWrapper key={index}>
+                    <div>{obj.name}님의 응모 내역</div>
+                    <div>{obj.style_code}</div>
+                    <div className={obj.is_winner !== 0 ? 'winResult active' : 'winResult'}>
+                      {obj.is_winner !== 0 ? '당첨' : '미당첨'}
+                    </div>
+                  </UserDataWrapper>
+                );
+              })}
+          </ModalContainer>
+        </ModalBackground>
+      ) : null}
+
+      <SNKRSDetailInfosTitle>{data.name}</SNKRSDetailInfosTitle>
+      <SNKRSDetailInfosPrice>{data.price} 원</SNKRSDetailInfosPrice>
+      <div>Description</div>
+      <div>한정판 드가자</div>
+      <div>1월 23일 오전 9시 출시 예정</div>
+      <SizeSelection>
+        <select onChange={pickValue}>
+          <option value="사이즈 선택">사이즈 선택</option>
+          {data.info &&
+            data.info.map((obj, index) => {
+              return (
+                <option key={index} value={obj.size}>
+                  {obj.size}
+                </option>
+              );
+            })}
+        </select>
+      </SizeSelection>
+      <button onClick={() => draw()}>응모하기</button>
+      <button onClick={() => setOpenModal(true)}>추첨 확인</button>
+    </SNKRSDetailInfos>
+  );
+}
 
 const SNKRSDetailInfos = styled.div`
   margin: 0 auto;
@@ -113,116 +215,3 @@ const UserDataWrapper = styled.div`
     color: #b74141;
   }
 `;
-
-export default function SNKRSDetailInfo() {
-  const [data, setData] = useState('');
-  const [userData, setUserData] = useState([]);
-  const [count, setCount] = useState(0);
-  const [size, setSize] = useState(0);
-  const [openModal, setOpenModal] = useState(false);
-  const [alertMessage, setAlertMessage] = useState('');
-  useEffect(() => {
-    axios
-      .get(`${process.env.REACT_APP_BASE_URL}/product/detail/DAA-0001`)
-      .then(res => setData(res.data.data));
-  }, []);
-  // useEffect(() => {
-  //   axios.get('data/snkrsuserdata.json').then(res => setUserData(res.data.data));
-  // }, []);
-
-  useEffect(() => {
-    fetch(`${process.env.REACT_APP_BASE_URL}/snkrs`, {
-      method: 'POST',
-      mode: 'cors',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        user_id: 1,
-        style_code: `${data.style_code}`,
-        size: `${size}`,
-      }),
-    })
-      .then(res => res.json())
-      .then(res => {
-        if (res.err) {
-          setAlertMessage(res.err);
-        } else {
-          setAlertMessage('응모가 완료되었습니다');
-        }
-      });
-  }, []);
-
-  // useEffect(() => {
-  //   fetch(`${process.env.REACT_APP_BASE_URL}/product/detail/DAA-0001`, {
-  //     method: 'GET',
-  //     mode: 'cors',
-  //     headers: { 'Content-Type': 'application/json' },
-  //   })
-  //     .then(res => res.json())
-  //     .then(res => {
-  //       if (res.err) {
-  //         setAlertMessage(res.err);
-  //       } else {
-  //         setAlertMessage('응모가 완료되었습니다');
-  //       }
-  //       // setData(res.data.data);
-  //     });
-  // }, []);
-
-  const closeModal = () => {
-    setOpenModal(false);
-  };
-
-  useEffect(() => {
-    if (data.is_open !== 0) {
-      setCount(count + 1);
-    }
-  }, []);
-
-  const allowClick = () => {
-    size === 0 ? alert('no') : alert('hi');
-  };
-  return (
-    <SNKRSDetailInfos>
-      {openModal ? (
-        <ModalBackground onClick={() => closeModal()}>
-          <ModalContainer onClick={e => e.stopPropagation()}>
-            <div>추첨 결과</div>
-            <GrClose className="SNKRSModalIcon" onClick={() => closeModal()} />
-            {userData &&
-              userData.map((obj, index) => {
-                return (
-                  <UserDataWrapper>
-                    <div>{index + 1}회차</div>
-                    <div>{obj.name}</div>
-                    <div>{obj.style_code}</div>
-                    <div className={obj.is_winner !== 0 ? 'winResult active' : 'winResult'}>
-                      {obj.is_winner !== 0 ? '당첨' : '미당첨'}
-                    </div>
-                  </UserDataWrapper>
-                );
-              })}
-          </ModalContainer>
-        </ModalBackground>
-      ) : null}
-      <SNKRSDetailInfosTitle>{data.name}</SNKRSDetailInfosTitle>
-      <SNKRSDetailInfosPrice>{data.price} 원</SNKRSDetailInfosPrice>
-      <div>Description</div>
-      <div>1월 23일 오전 9시 출시 예정</div>
-      <SizeSelection>
-        <select>
-          <option value="사이즈 선택">사이즈 선택</option>;
-          {data.info &&
-            data.info.map((obj, index) => {
-              return (
-                <option value={obj.size} onChange={() => setSize(obj.size)}>
-                  {obj.size}
-                </option>
-              );
-            })}
-        </select>
-      </SizeSelection>
-      <button onClick={() => allowClick()}>응모하기</button>
-      <button onClick={() => setOpenModal(true)}>추첨 확인</button>
-    </SNKRSDetailInfos>
-  );
-}

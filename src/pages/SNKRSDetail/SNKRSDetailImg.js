@@ -1,6 +1,34 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
+export default function DetailImg() {
+  const [mockdata, setMockdata] = useState([]);
+
+  const params = useParams();
+  useEffect(() => {
+    axios
+      .get(`${process.env.REACT_APP_BASE_URL}/snkrs/detail/${params.styleCode}`)
+      .then(res => setMockdata(res.data.data.img));
+  }, []);
+
+  return (
+    <StyledDetailImg>
+      <Wrapper>
+        {mockdata &&
+          mockdata.map(obj => {
+            return (
+              <List key={obj.url}>
+                <ImgWrapper>
+                  <img src={obj.url} alt={obj.url} />
+                </ImgWrapper>
+              </List>
+            );
+          })}
+      </Wrapper>
+    </StyledDetailImg>
+  );
+}
 
 const StyledDetailImg = styled.div`
   width: calc(100% - 449px);
@@ -35,29 +63,3 @@ const ImgWrapper = styled.div`
     background: #f2f2f2;
   }
 `;
-
-export default function DetailImg() {
-  const [mockdata, setMockdata] = useState([]);
-  useEffect(() => {
-    axios
-      .get(`${process.env.REACT_APP_BASE_URL}/product/detail/DAA-0001`)
-      .then(res => setMockdata(res.data.data.img));
-  }, []);
-
-  return (
-    <StyledDetailImg>
-      <Wrapper>
-        {mockdata &&
-          mockdata.map(obj => {
-            return (
-              <List key={obj.url}>
-                <ImgWrapper>
-                  <img src={obj.url} alt={obj.url} />
-                </ImgWrapper>
-              </List>
-            );
-          })}
-      </Wrapper>
-    </StyledDetailImg>
-  );
-}

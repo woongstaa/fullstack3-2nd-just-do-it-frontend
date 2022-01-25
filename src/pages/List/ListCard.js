@@ -26,7 +26,7 @@ function ListCard({
       <div className="cardWrapper" key={key}>
         {!isMember ? (
           <div className="imgWrapper">
-            <Link to={`/detail?styleCode=${styleCode}`}>
+            <Link to={`/detail/${styleCode}`}>
               <img alt={productName} src={imgUrl} />
             </Link>
           </div>
@@ -36,7 +36,7 @@ function ListCard({
             onMouseEnter={() => setMouse(true)}
             onMouseLeave={() => setMouse(false)}
           >
-            <Link to={`/detail?styleCode=${styleCode}`}>
+            <Link to={`/detail/${styleCode}`}>
               <div className="white" style={mouse ? { display: 'block' } : { display: 'none' }}>
                 <div className="comment">
                   나이키 멤버만

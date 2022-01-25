@@ -24,9 +24,13 @@ function ManModal({ setMenModalOn }) {
             </ul>
           </ul>
           <ul className="modalCol">
-            <li className="cateTitle">신발</li>
+            <a href="/list?genderId=1&categoryId=1">
+              <li className="cateTitle">신발</li>
+            </a>
             <ul className="cateList">
-              <li>신발 전체</li>
+              <a href="/list?genderId=1&categoryId=1">
+                <li>신발 전체</li>
+              </a>
               <li>라이프스타일</li>
               <li>러닝</li>
               <li>트레이닝 & 짐</li>
@@ -40,9 +44,13 @@ function ManModal({ setMenModalOn }) {
             </ul>
           </ul>
           <ul className="modalCol">
-            <li className="cateTitle">의류</li>
+            <a href="/list?genderId=1&categoryId=2">
+              <li className="cateTitle">의류</li>
+            </a>
             <ul className="cateList">
-              <li>의류 전체</li>
+              <a href="/list?genderId=1&categoryId=2">
+                <li>의류 전체</li>
+              </a>
               <li>후디 & 크루</li>
               <li>팬츠 & 타이츠</li>
               <li>재킷 & 베스트</li>
@@ -53,7 +61,9 @@ function ManModal({ setMenModalOn }) {
               <li>셋업</li>
             </ul>
             <br />
-            <li className="cateTitle">용품</li>
+            <a href="/list?genderId=1&categoryId=2">
+              <li className="cateTitle">용품</li>
+            </a>
             <ul className="cateList">
               <li>모자 & 헤드밴드</li>
               <li>가방</li>
@@ -91,6 +101,11 @@ function ManModal({ setMenModalOn }) {
 const Modal = styled.div`
   font-family: ${props => props.theme.fontContent};
 
+  a {
+    text-decoration: none;
+    cursor: pointer;
+  }
+
   .modal {
     position: fixed;
     top: 80px;
@@ -116,6 +131,7 @@ const Modal = styled.div`
           margin-bottom: 15px;
           font-weight: 700;
           font-size: 18px;
+          color: black;
         }
 
         .cateList {

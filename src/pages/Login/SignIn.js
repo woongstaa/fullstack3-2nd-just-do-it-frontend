@@ -121,7 +121,7 @@ const SignInWrapper = styled.div`
         input {
           margin-bottom: 16px;
           font-size: 12px;
-          padding: 6px;
+          padding: 10px;
           border: 1px solid gainsboro;
         }
       }

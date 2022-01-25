@@ -21,7 +21,9 @@ function KidModal({ setKidModalOn }) {
             </ul>
           </ul>
           <ul className="modalCol">
-            <li className="cateTitle">신발</li>
+            <a href="/list?genderId=3&categoryId=1">
+              <li className="cateTitle">신발</li>
+            </a>
             <ul className="cateList">
               <li>베이비(160mm 이하)</li>
               <li>리틀키즈(165-220mm)</li>
@@ -34,7 +36,9 @@ function KidModal({ setKidModalOn }) {
             </ul>
           </ul>
           <ul className="modalCol">
-            <li className="cateTitle">의류</li>
+            <a href="/list?genderId=3&categoryId=2">
+              <li className="cateTitle">의류</li>
+            </a>
             <ul className="cateList">
               <li>베이비 (0-4세)</li>
               <li>리틀키즈 (4-7세)</li>
@@ -48,7 +52,9 @@ function KidModal({ setKidModalOn }) {
               <li>가방 & 모자 & 용품</li>
             </ul>
             <br />
-            <li className="cateTitle">용품</li>
+            <a href="/list?genderId=3&categoryId=3">
+              <li className="cateTitle">용품</li>
+            </a>
             <ul className="cateList">
               <li>가방</li>
               <li>모자</li>
@@ -72,6 +78,11 @@ function KidModal({ setKidModalOn }) {
 
 const Modal = styled.div`
   font-family: ${props => props.theme.fontContent};
+
+  a {
+    text-decoration: none;
+    cursor: pointer;
+  }
 
   .modal {
     position: fixed;
@@ -98,6 +109,7 @@ const Modal = styled.div`
           margin-bottom: 15px;
           font-weight: 700;
           font-size: 18px;
+          color: black;
         }
 
         .cateList {

@@ -8,43 +8,49 @@ import ListFilterCard from './ListFilterCard';
 import { useEffect, useState } from 'react';
 import { GET_LIST_API } from '../../config';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 
 function List() {
-  const [filter, setFilter] = useState(false);
+  const [filter, setFilter] = useState(true);
   const [listData, setListData] = useState([]);
 
   const params = useParams();
+  const location = useLocation().search;
+  const query = new URLSearchParams(location);
 
-  const URL = new URLSearchParams(params);
+  // &size=${params.size}&colorId=${params.colorId}&subBrandName=${
+  //   params.subBrandName
+  // }&subIconName=${params.subIconName}&subClothesName=${
+  //   params.subClothesName
+  // }&subAccessoriesName=${params.subAccessoriesName}
+
+  const URL = `${GET_LIST_API}?genderId=${query.get('genderId')}&categoryId=${query.get(
+    'categoryId'
+  )}`;
+
+  const FILTER_URL = `${process.env.REACT_APP_BASE_FRONT_URL}?genderId=${query.get(
+    'genderId'
+  )}&categoryId=${query.get('categoryId')}`;
+
+  const changeParams = new URLSearchParams(FILTER_URL);
+
   useEffect(() => {
     axios({
-      // `${GET_LIST_API}?genderId=${params.genderId}&categoryId=${params.categoryId}&size=${params.size}&colorId=${params.colorId}&subBrandName=${params.subBrandName}&subIconName=${params.subIconName}&subClothesName=${params.subClothesName}&subAccessoriesName=${params.subAccessoriesName}`,
-      url: `${GET_LIST_API}`,
+      url: URL,
       method: 'GET',
     }).then(response => {
       setListData(response.data.list);
     });
   }, []);
 
-  // useEffect(() => {
-  //   fetch('http://localhost:8000/product/list', {
-  //     method: 'GET',
-  //     headers: { 'Content-type': 'application/json', mode: 'cors' },
-  //   })
-  //     .then(res => res.json())
-  //     .then(data => setListData(data.list));
-  // }, []);
-
   return (
     <>
-      {console.log(URL)}
       <Top />
       <TopNav />
       <ListWrapper>
-        <ListTop filter={filter} setFilter={setFilter} />
+        <ListTop filter={filter} setFilter={setFilter} query={query} />
         <ListBody>
-          <ListFilterCard filter={filter} />
+          <ListFilterCard filter={filter} FILTER_URL={FILTER_URL} changeParams={changeParams} />
           <ListCardWrapper>
             {listData.map((element, index) => {
               return (
