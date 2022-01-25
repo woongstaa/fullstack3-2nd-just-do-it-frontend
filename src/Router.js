@@ -5,8 +5,8 @@ import SignUp from './pages/Login/SignUp';
 import SnkrsList from './pages/SNKRSList/SnkrsList';
 import SNKRSDetail from './pages/SNKRSDetail/SNKRSDetail';
 import Auth from './pages/Login/Auth';
-import Top from './components/Top';
 import Login from './pages/Login/Login';
+import Main from './pages/Main/Main';
 
 function Router() {
   return (
@@ -16,10 +16,10 @@ function Router() {
         <Route path="/snkrs" element={<SnkrsList />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/list" element={<List />} />
-        <Route path="/snkrsdetail" element={<SNKRSDetail />} />
+        <Route path="/snkrs/detail/:styleCode" element={<SNKRSDetail />} />
         <Route path="/oauth" element={<Auth />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/" element={<Top />} />
+        <Route path="/" element={<Main />} />
       </Routes>
     </BrowserRouter>
   );

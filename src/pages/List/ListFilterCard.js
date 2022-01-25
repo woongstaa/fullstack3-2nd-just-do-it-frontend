@@ -3,12 +3,12 @@ import { Link } from 'react-router-dom';
 import ColorFilter from './filter/ColorFilter';
 import SizeFilter from './filter/SizeFilter';
 
-function ListFilterCard({ filter }) {
+function ListFilterCard({ filter, FILTER_URL, changeParams }) {
   return (
     <FilterWrapper>
       <div className={filter ? 'notHide' : 'hide'}>
-        <SizeFilter />
-        <ColorFilter />
+        <SizeFilter FILTER_URL={FILTER_URL} changeParams={changeParams} />
+        <ColorFilter FILTER_URL={FILTER_URL} changeParams={changeParams} />
       </div>
     </FilterWrapper>
   );

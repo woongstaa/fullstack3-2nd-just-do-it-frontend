@@ -1,15 +1,25 @@
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 
-function SizeFilter() {
+function SizeFilter({ FILTER_URL, changeParams }) {
   const navigate = useNavigate();
+
+  const addFilter = size => {
+    // let url = new URL(FILTER_URL);
+    let params = new URLSearchParams(window.location.search);
+    // // console.log(url);
+    // console.log(params.getAll('categoryId'));
+    // params.append('size', 220);
+    params.append('size', `${size}`);
+  };
+
   return (
     <FilterWrapper>
       <Title>신발 사이즈</Title>
       <Content>
         {size.map((e, i) => {
           return (
-            <button key={i} onClick={() => navigate(e.url)}>
+            <button key={i} onClick={() => addFilter()}>
               {e.size}
             </button>
           );

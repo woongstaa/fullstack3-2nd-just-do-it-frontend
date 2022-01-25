@@ -63,9 +63,15 @@ function TopNav() {
               <Link to="/snkrs">
                 <div>SNKRS</div>
               </Link>
-              <div onMouseEnter={() => setMenModalOn(true)}>MEN</div>
-              <div onMouseOver={() => setWomenModalOn(true)}>WOMEN</div>
-              <div onMouseOver={() => setKidModalOn(true)}>KID</div>
+              <a href="/list?genderId=1">
+                <div onMouseEnter={() => setMenModalOn(true)}>MEN</div>
+              </a>
+              <a href="/list?genderId=2">
+                <div onMouseOver={() => setWomenModalOn(true)}>WOMEN</div>
+              </a>
+              <a href="/list?genderId=3">
+                <div onMouseOver={() => setKidModalOn(true)}>KID</div>
+              </a>
               <div onMouseOver={() => setSaleModalOn(true)}>SALES</div>
             </div>
           </NavCenter>
