@@ -9,16 +9,16 @@ import { POST_MEMBER_API } from '../config';
 
 function Top() {
   const [modal, setModal] = useState(false);
-  const email = localStorage.getItem('token');
+  const user_id = localStorage.getItem('token');
 
   const makeMember = () => {
     axios.post(POST_MEMBER_API, {
-      email: email,
+      user_id: user_id,
     });
+    alert('프리미엄 회원이 되신 것을 축하드립니다!');
   };
   return (
     <>
-      {console.log(email)}
       {modal && <SignIn modal={modal} setModal={setModal} />}
       <TopWrapper>
         <TopLeft>
@@ -66,6 +66,7 @@ const TopRight = styled.ul`
   li {
     padding-left: 1vw;
     font-size: 0.8rem;
+    cursor: pointer;
   }
 
   a {

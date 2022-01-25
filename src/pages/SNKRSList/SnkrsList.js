@@ -83,7 +83,7 @@ function SnkrsList() {
                   onMouseEnter={() => setBtnActive(true)}
                   onMouseLeave={() => setBtnActive(false)}
                 >
-                  <Link to="#">
+                  <Link to={`/snkrsdetail?styleCode=${e.style_code}`}>
                     <div className="imgWrapper">
                       <img src={e.imgUrl} alt={e.snkrsName} />
                     </div>
