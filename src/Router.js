@@ -12,7 +12,7 @@ function Router() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/detail" element={<Detail />} />
+        <Route path="/product/detail/:styleCode" element={<Detail />} />
         <Route path="/snkrs" element={<SnkrsList />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/list" element={<List />} />
