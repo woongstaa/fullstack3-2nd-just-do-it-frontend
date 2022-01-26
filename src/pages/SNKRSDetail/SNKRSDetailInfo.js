@@ -18,7 +18,7 @@ export default function SNKRSDetailInfo() {
       .get(`${process.env.REACT_APP_BASE_URL}/snkrs/detail/${params.styleCode}`)
       .then(res => setData(res.data.data));
   }, []);
-
+  console.log(data.is_open);
   const draw = () => {
     if (size === 0 || size === '사이즈 선택') {
       return alert('신발 사이즈를 선택해주세요!');
@@ -34,8 +34,13 @@ export default function SNKRSDetailInfo() {
           style_code: `${data.style_code}`,
           size: `${size}`,
         }),
-      }).then(res => res.json());
-      alert('응모가 완료되었습니다');
+      }).then(res => {
+        if (res.status === 500) {
+          alert('이미 추첨을 하셨습니다');
+        } else {
+          alert('응모가 완료되었습니다');
+        }
+      });
     }
   };
 
@@ -47,19 +52,19 @@ export default function SNKRSDetailInfo() {
     setSize(e.target.value);
   };
 
-  useEffect(() => {
-    axios
-      .get(`${process.env.REACT_APP_BASE_URL}/snkrs`, {
-        user_id: userId,
-        style_code: params.styleCode,
-      })
-      .then(res => setUserData(res.data));
-  }, []);
+  // useEffect(() => {
+  //   axios
+  //     .put(`${process.env.REACT_APP_BASE_URL}/snkrs`, {
+  //       user_id: userId,
+  //       style_code: params.styleCode,
+  //     })
+  //     .then(res => setUserData(res.data));
+  // }, []);
 
   return (
     <SNKRSDetailInfos>
-      {console.log(userId)}
-      {console.log(params.styleCode)}
+      {/* {console.log(userId)}
+      {console.log(params.styleCode)} */}
       {openModal ? ( // 모달 창
         <ModalBackground onClick={() => closeModal()}>
           <ModalContainer onClick={e => e.stopPropagation()}>
@@ -83,9 +88,15 @@ export default function SNKRSDetailInfo() {
 
       <SNKRSDetailInfosTitle>{data.name}</SNKRSDetailInfosTitle>
       <SNKRSDetailInfosPrice>{data.price} 원</SNKRSDetailInfosPrice>
-      <div>Description</div>
+      <div>
+        모든 복장을 자기표현의 기회로 삼으세요. 커스텀이 가능한 이번 덩크 로우는 농구 아이콘을
+        강조해 오랜 시간을 거쳐 검증된 디자인 그 이상을 보여줍니다. 다양한 방법으로 신발 끈을 조일
+        수 있는 옵션, 더블 아이스테이, 여분의 신발 끈 세트로 날마다 어울리는 맞춤 룩을 연출할 수
+        있습니다. 과감해지는 걸 두려워하지 마세요. 설포의 신축성 밴드가 신발 끈이 느슨해져도 꼭 맞는
+        핏을 선사합니다.
+      </div>
       <div>한정판 드가자</div>
-      <div>1월 23일 오전 9시 출시 예정</div>
+      <div>매일 오전 09:00 ~ 09:30 추첨 가능합니다.</div>
       <SizeSelection>
         <select onChange={pickValue}>
           <option value="사이즈 선택">사이즈 선택</option>
@@ -99,23 +110,29 @@ export default function SNKRSDetailInfo() {
             })}
         </select>
       </SizeSelection>
-      <button onClick={() => draw()}>응모하기</button>
+      {data.is_open === 0 ? (
+        <button onClick={() => draw()} disabled={true}>
+          Comming SOON!
+        </button>
+      ) : (
+        <button onClick={() => draw()} disabled={false}>
+          응모하기
+        </button>
+      )}
+
       <button onClick={() => setOpenModal(true)}>추첨 확인</button>
     </SNKRSDetailInfos>
   );
 }
 
 const SNKRSDetailInfos = styled.div`
-  margin: 0 auto;
-  position: fixed;
   right: 120px;
   top: 100px;
   display: flex;
+  margin-left: 50px;
+  margin-top: 100px;
   flex-direction: column;
-  max-width: 480px;
-  margin: 0 auto;
-  min-height: 100vh;
-  max-height: 100vh;
+  width: 300px;
   height: 100%;
 
   span {
@@ -162,7 +179,7 @@ const SNKRSDetailInfosPrice = styled.div`
 const SizeSelection = styled.div`
   select {
     width: 100%;
-    font-size: 20px;
+    font-size: 15px;
     padding: 8px 16px;
   }
 `;
