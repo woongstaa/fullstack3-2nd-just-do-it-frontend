@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
+
 export default function DetailImg() {
   const [mockdata, setMockdata] = useState([]);
 
@@ -16,13 +17,13 @@ export default function DetailImg() {
     <StyledDetailImg>
       <Wrapper>
         {mockdata &&
-          mockdata.map(obj => {
+          mockdata.map((obj, i) => {
             return (
-              <List key={obj.url}>
-                <ImgWrapper>
+              <ImgWrapper key={i}>
+                <div className="center">
                   <img src={obj.url} alt={obj.url} />
-                </ImgWrapper>
-              </List>
+                </div>
+              </ImgWrapper>
             );
           })}
       </Wrapper>
@@ -31,35 +32,44 @@ export default function DetailImg() {
 }
 
 const StyledDetailImg = styled.div`
-  width: 1000px;
-  position: relative;
   padding: 0 10px;
+  width: 70%;
+  @media screen and (max-width: 640px) {
+    display: flex;
+    justify-content: center;
+  }
 `;
 
 const Wrapper = styled.section`
   display: grid;
   grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
-
-  column-gap: 10px;
-`;
-
-const List = styled.li`
-  position: relative;
-  width: 99%;
-  display: flex;
+  gap: 10px;
+  width: 100%;
+  text-align: center;
+  justify-items: center;
   justify-content: center;
-  background: #f2f2f2;
-  align-items: center;
-  margin-bottom: 20px;
+
+  @media screen and (max-width: 640px) {
+    grid-template-columns: 1fr;
+    justify-content: center;
+    align-items: center;
+  }
 `;
 
 const ImgWrapper = styled.div`
-  position: relative;
-  width: 100%;
+  background: #f2f2f2;
+  width: 500px;
+  height: 500px;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
-  img {
-    width: 100%;
-    background: #f2f2f2;
+  .center {
+    display: flex;
+    justify-content: center;
+    img {
+      width: 100%;
+    }
   }
 `;

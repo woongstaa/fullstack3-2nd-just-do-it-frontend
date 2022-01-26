@@ -13,10 +13,16 @@ function Top() {
   const user_id = localStorage.getItem('token');
 
   const makeMember = () => {
-    axios.post(POST_MEMBER_API, {
-      user_id: user_id,
-    });
-    alert('프리미엄 회원이 되신 것을 축하드립니다!');
+    axios
+      .post(POST_MEMBER_API, {
+        user_id: user_id,
+      })
+      .then(() => {
+        alert('프리미엄 회원이 되신 것을 축하드립니다!');
+      })
+      .catch(() => {
+        alert('이미 프리미엄 회원입니다!');
+      });
   };
 
   const logOut = () => {

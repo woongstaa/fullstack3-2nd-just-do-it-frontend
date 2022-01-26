@@ -3,21 +3,12 @@ import styled from 'styled-components';
 import SNKRSDetailImg from './SNKRSDetailImg';
 import SNKRSDetailInfo from './SNKRSDetailInfo';
 import Footer from '../../components/Footer';
-import Top from '../../components/Top';
-import TopNav from '../../components/TopNav';
-
-const DetailSection = styled.section`
-  display: flex;
-  justify-content: center;
-  margin-top: 100px;
-  margin-bottom: 200px;
-`;
+import SnkrsTop from '../SNKRSList/SnkrsTop';
 
 export default function SNKRSDetail() {
   return (
     <div className="SNKRSDetail">
-      <Top />
-      <TopNav />
+      <SnkrsTop />
       <DetailSection>
         <SNKRSDetailImg />
         <SNKRSDetailInfo />
@@ -26,3 +17,13 @@ export default function SNKRSDetail() {
     </div>
   );
 }
+
+const DetailSection = styled.section`
+  display: flex;
+  margin-top: 100px;
+  margin-bottom: 200px;
+
+  @media screen and (max-width: 640px) {
+    flex-direction: column;
+  }
+`;

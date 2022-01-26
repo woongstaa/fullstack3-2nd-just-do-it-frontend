@@ -13,12 +13,14 @@ export default function SNKRSDetailInfo() {
 
   const userId = localStorage.getItem('token');
 
+  // 페이지 렌더링 데이터
   useEffect(() => {
     axios
       .get(`${process.env.REACT_APP_BASE_URL}/snkrs/detail/${params.styleCode}`)
       .then(res => setData(res.data.data));
   }, []);
-  console.log(data.is_open);
+
+  // 드로우
   const draw = () => {
     if (size === 0 || size === '사이즈 선택') {
       return alert('신발 사이즈를 선택해주세요!');
@@ -52,42 +54,48 @@ export default function SNKRSDetailInfo() {
     setSize(e.target.value);
   };
 
-  // useEffect(() => {
-  //   axios
-  //     .put(`${process.env.REACT_APP_BASE_URL}/snkrs`, {
-  //       user_id: userId,
-  //       style_code: params.styleCode,
-  //     })
-  //     .then(res => setUserData(res.data));
-  // }, []);
+  // 추첨 결과
   useEffect(() => {
-    fetch(`${process.env.REACT_APP_BASE_URL}/snkrs`, {
-      body: JSON.stringify({
+    axios
+      .put(`${process.env.REACT_APP_BASE_URL}/snkrs`, {
         user_id: userId,
         style_code: params.styleCode,
-      }),
-    })
-      .then(res => res.json)
-      .then(res => setUserData(res.data));
+      })
+      .then(res => setUserData(res.data.data));
   }, []);
 
+  // [res.data.data.length - 1]
   return (
     <SNKRSDetailInfos>
-      {/* {console.log(userId)}
-      {console.log(params.styleCode)} */}
+      {/* {console.log(userData[1])} */}
       {openModal ? ( // 모달 창
         <ModalBackground onClick={() => closeModal()}>
           <ModalContainer onClick={e => e.stopPropagation()}>
-            <div>추첨 결과</div>
+            <div className="title">Result</div>
             <GrClose className="SNKRSModalIcon" onClick={() => closeModal()} />
             {userData &&
               userData.map((obj, index) => {
                 return (
                   <UserDataWrapper key={index}>
-                    <div>{obj.name}님의 응모 내역</div>
-                    <div>{obj.style_code}</div>
-                    <div className={obj.is_winner !== 0 ? 'winResult active' : 'winResult'}>
-                      {obj.is_winner !== 0 ? '당첨' : '미당첨'}
+                    <div>
+                      <span>{obj.name}님</span>의 응모결과
+                    </div>
+                    <div className="content">
+                      {obj.is_winner ? (
+                        <div className="win">
+                          <div>🎉 축하합니다 🎉</div>
+                          <div>
+                            <span>{obj.name}님</span>은 {obj.style_code}에 당첨되셨습니다!
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="lose">
+                          <div>
+                            아쉽게도 <span>{obj.name}님</span>은 당첨되지 않았습니다
+                          </div>
+                          <div>다음 드로우에 도전하세요!</div>
+                        </div>
+                      )}
                     </div>
                   </UserDataWrapper>
                 );
@@ -97,16 +105,26 @@ export default function SNKRSDetailInfo() {
       ) : null}
 
       <SNKRSDetailInfosTitle>{data.name}</SNKRSDetailInfosTitle>
-      <SNKRSDetailInfosPrice>{data.price} 원</SNKRSDetailInfosPrice>
-      <div>
-        모든 복장을 자기표현의 기회로 삼으세요. 커스텀이 가능한 이번 덩크 로우는 농구 아이콘을
-        강조해 오랜 시간을 거쳐 검증된 디자인 그 이상을 보여줍니다. 다양한 방법으로 신발 끈을 조일
-        수 있는 옵션, 더블 아이스테이, 여분의 신발 끈 세트로 날마다 어울리는 맞춤 룩을 연출할 수
-        있습니다. 과감해지는 걸 두려워하지 마세요. 설포의 신축성 밴드가 신발 끈이 느슨해져도 꼭 맞는
-        핏을 선사합니다.
+      <SNKRSDetailInfosPrice>{parseInt(data.price).toLocaleString()} 원</SNKRSDetailInfosPrice>
+      <div className="desc">
+        모든 복장을 자기표현의 기회로 삼으세요!
+        <br />
+        <br />
+        <span>
+          {`이번 ${data.name}는 농구 아이콘을 강조해 오랜 시간을 거쳐 검증된 디자인 그
+        이상을 보여줍니다!`}
+        </span>
+        <br />
+        <br />
+        다양한 방법으로 신발 끈을 조일 수 있는 옵션, 더블 아이스테이, 여분의 신발 끈 세트로 날마다
+        어울리는 맞춤 룩을 연출할 수 있습니다!
+        <br />
+        <br /> 과감해지는 걸 두려워하지 마세요! <br />
+        <br /> 설포의 신축성 밴드가 신발 끈이 느슨해져도 꼭 맞는 핏을 선사합니다!
+        <br />
+        <br />
+        <div>매일 오전 09:00 ~ 09:30 추첨!</div>
       </div>
-      <div>한정판 드가자</div>
-      <div>매일 오전 09:00 ~ 09:30 추첨 가능합니다.</div>
       <SizeSelection>
         <select onChange={pickValue}>
           <option value="사이즈 선택">사이즈 선택</option>
@@ -136,61 +154,66 @@ export default function SNKRSDetailInfo() {
 }
 
 const SNKRSDetailInfos = styled.div`
-  right: 120px;
-  top: 100px;
   display: flex;
-  margin-left: 50px;
-  margin-top: 100px;
   flex-direction: column;
-  width: 300px;
-  height: 100%;
+  width: 30%;
+  margin: 0 50px;
 
-  span {
-    position: fixed;
-    z-index: 1000;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    background: rgba(0, 0, 0, 0.6);
-    transition: opacity 0.15s linear;
-  }
+  .desc {
+    padding: 8px;
+    margin: 30px 0;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 22px;
+    text-align: center;
 
-  div {
-    margin: 20px auto;
+    & > div {
+      text-align: center;
+    }
   }
 
   button {
     width: 100%;
-    height: auto;
-    margin-bottom: 24px;
     margin-top: 20px;
-    padding: 18px 1.5em;
+    padding: 16px 1.5em;
     border-radius: 30px;
     border: none;
     color: white;
     background: black;
-    font-size: 16px;
+    font-size: 14px;
     cursor: pointer;
 
     &:hover {
       background: gray;
     }
   }
+
+  @media screen and (max-width: 640px) {
+    width: 90%;
+  }
 `;
 
 const SNKRSDetailInfosTitle = styled.div`
   font-size: 30px;
+  font-weight: 900;
+  line-height: 50px;
+  text-align: center;
 `;
 
 const SNKRSDetailInfosPrice = styled.div`
-  font-size: 20px;
+  font-size: 26px;
+  font-weight: 700;
+  text-align: center;
+  margin-top: 30px;
 `;
+
 const SizeSelection = styled.div`
+  text-align: center;
   select {
-    width: 100%;
+    width: 80%;
     font-size: 15px;
     padding: 8px 16px;
+    margin-bottom: 30px;
   }
 `;
 
@@ -219,6 +242,12 @@ const ModalContainer = styled.div`
   border-radius: 24px;
   box-shadow: 0 0 10px rgb(0 0 0 / 30%);
   text-align: center;
+  overflow-y: hidden;
+
+  .title {
+    margin-top: 50px;
+    font-size: 30px;
+  }
 
   .SNKRSModalIcon {
     text-align: center;
@@ -231,9 +260,16 @@ const ModalContainer = styled.div`
 `;
 
 const UserDataWrapper = styled.div`
-  margin: 10px 0;
-  border-bottom: 1px gray solid;
+  margin-top: 40%;
+  font-size: 20px;
 
+  span {
+    font-weight: 700;
+  }
+
+  div {
+    padding: 10px;
+  }
   .winResult.active {
     color: #c3a923;
   }
