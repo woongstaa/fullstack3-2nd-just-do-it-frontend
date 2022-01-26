@@ -1,14 +1,24 @@
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import styled from 'styled-components';
+import styled, { css, keyframes } from 'styled-components';
 import axios from 'axios';
 import { GrFormClose } from 'react-icons/gr';
-import StarRating from './StarRating';
+import { IoIosArrowDown } from 'react-icons/io';
 import StarRatings from 'react-star-ratings';
+import Slider from 'react-input-slider';
+
+const rotate = keyframes`
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(180deg);
+  }
+`;
 
 const DetailInfos = styled.div`
-  width: 450px;
+  width: 25vw;
   padding: 0 54px 0 10px;
 `;
 
@@ -202,30 +212,62 @@ const ReviewHeader = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+
   h5 {
     display: inline;
     font-size: 20px;
   }
+
   .reviewRight {
-    span,
-    button {
-      margin-left: 7px;
+    display: flex;
+    align-items: center;
+
+    span {
+      margin-right: 10px;
+    }
+
+    .rotateIcon {
+      cursor: pointer;
+      animation: ${props =>
+        props.visible &&
+        css`
+          ${rotate} 0.3s linear
+        `};
     }
   }
 `;
 
 const ReviewContent = styled.div`
-  display: flex;
-  justify-content: space-between;
   font-size: 20px;
   padding-top: ${props => (props.visible !== false ? '30px' : 0)};
   opacity: ${props => (props.visible !== false ? 1 : 0)};
-  height: ${props => (props.visible !== false ? '30px' : '0px')};
-  transition: all 0.5s;
+  height: ${props => (props.visible !== false ? '450px' : '0px')};
+  transition: all 0.3s;
 
   button {
-    display: inline-block;
-    height: 30px;
+    position: relative;
+    padding: 5px 10px;
+
+    background: black;
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+`;
+
+const SliderWrapper = styled.div`
+  .sliderName {
+    margin: 6px 0;
+    font-size: 18px;
+    font-weight: 600;
+  }
+  .sliderValue {
+    display: flex;
+    justify-content: space-between;
+    margin: 10px 0;
+    margin-bottom: 40px;
+    font-size: 15px;
+    color: #606060;
   }
 `;
 
@@ -376,13 +418,18 @@ export default function DetailInfo() {
   const [data, setData] = useState([]);
   const [clicked, setClicked] = useState(false);
   const [addCart, setAddCart] = useState(false);
-  const [member, setMember] = useState(0);
-  const [cartIndex, setCartIndex] = useState(0);
+  const [comfortState, setComfortState] = useState({ x: 2.5 });
+  const [colorState, setColorState] = useState({ x: 2.5 });
+  const [sizeState, setSizeState] = useState({ x: 2.5 });
+  const [widthState, setWidthState] = useState({ x: 2.5 });
+  const [reviewChange, setReviewChange] = useState(0);
+  const [reviewAverage, setReviewAverage] = useState(0);
 
   useEffect(() => {
     axios
       .get(`${process.env.REACT_APP_BASE_URL}/product/detail/${params.styleCode}`)
-      .then(res => setData(res.data.data));
+      .then(res => setData(res.data.data))
+      .then(setReviewChange(reviewChange + 1));
   }, []);
 
   useEffect(() => {
@@ -401,6 +448,50 @@ export default function DetailInfo() {
         }
       });
   }, [deleteOk, userId]);
+
+  const sendReview = () => {
+    fetch(`${process.env.REACT_APP_BASE_URL}/user/review`, {
+      method: 'POST',
+      mode: 'cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        user_id: `${userId}`,
+        styleCode: `${data.style_code}`,
+        size: sizeState.x,
+        color: colorState.x,
+        width: widthState.x,
+        comfort: comfortState.x,
+      }),
+    })
+      .then(res => res.json())
+      .then(res => {
+        setReviewChange(prev => prev + 1);
+        if (
+          res.message === 'REVIEW_POSTED' ||
+          res.message === '모든 속성에 대해 리뷰를 입력해주세요.'
+        ) {
+          alert('리뷰를 남겨주셔서 감사합니다');
+        } else {
+          alert(res.message);
+        }
+      });
+  };
+
+  useEffect(() => {
+    fetch(`${process.env.REACT_APP_BASE_URL}/user/reviewAverage`, {
+      method: 'POST',
+      mode: 'cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        styleCode: `${data.style_code}`,
+      }),
+    })
+      .then(res => res.json())
+      .then(res => {
+        setReviewAverage(res.review.totalAverage);
+        setReviewChange(prev => prev + 1);
+      });
+  }, [data, reviewChange, reviewAverage]);
 
   const deleteCart = (userId, cart_id) => {
     fetch(`${process.env.REACT_APP_BASE_URL}/cart`, {
@@ -467,24 +558,17 @@ export default function DetailInfo() {
         }
       });
   };
-  console.log('data :', data);
-  console.log('addCart :', addCart);
 
   const totalPrice = () => {
     let result = 0;
-    const total =
-      addCart &&
-      addCart.map((obj, i) => {
+    addCart &&
+      addCart.map(obj => {
         result += Math.round(
           obj.sale_price ? obj.sale_price * obj.quantity : obj.normal_price * obj.quantity
         );
       });
-    // for (let i = 0; i < total.length; i++) {
-    //   result += total[i];
-    // }
     return result;
   };
-
   return (
     <DetailInfos>
       <div className="productDetailInfoTitle">
@@ -565,25 +649,139 @@ export default function DetailInfo() {
           <span className="reviewRight">
             <span>
               <StarRatings
-                rating={2.4}
+                rating={reviewAverage}
                 starDimension="30px"
                 starSpacing="0px"
-                starRatedColor="#ffc107"
-                starEmptyColor="black"
+                starRatedColor="black"
+                starEmptyColor="#e5e5e5"
               />
             </span>
-            <button
+            <IoIosArrowDown
+              size={30}
               onClick={() => {
-                setVisible(!visible);
+                setVisible(prev => !prev);
               }}
-            >
-              내려오기
-            </button>
+              className="rotateIcon"
+              // visible={visible}
+            />
           </span>
         </ReviewHeader>
         <ReviewContent visible={visible}>
-          <StarRating />
-          <button>리뷰 제출</button>
+          <SliderWrapper>
+            <div className="sliderName">편안함</div>
+            <Slider
+              axis="x"
+              xstep={0.01}
+              xmin={0}
+              xmax={5}
+              x={comfortState.x}
+              onChange={({ x }) => setComfortState({ x: parseFloat(x.toFixed(2)) })}
+              styles={{
+                track: {
+                  backgroundColor: '#e5e5e5',
+                  height: '4px',
+                  width: '100%',
+                },
+                active: {
+                  backgroundColor: '#e5e5e5',
+                },
+                thumb: {
+                  backgroundColor: 'black',
+                  width: '8px',
+                  height: '8px',
+                },
+              }}
+            />
+            <div className="sliderValue">
+              <span>불편함</span>
+              <span>편안함</span>
+            </div>
+            <div className="sliderName">색상</div>
+            <Slider
+              axis="x"
+              xstep={0.01}
+              xmin={0}
+              xmax={5}
+              x={colorState.x}
+              onChange={({ x }) => setColorState({ x: parseFloat(x.toFixed(2)) })}
+              styles={{
+                track: {
+                  backgroundColor: '#e5e5e5',
+                  height: '4px',
+                  width: '100%',
+                },
+                active: {
+                  backgroundColor: '#e5e5e5',
+                },
+                thumb: {
+                  backgroundColor: 'black',
+                  width: '8px',
+                  height: '8px',
+                },
+              }}
+            />
+            <div className="sliderValue">
+              <span>화면보다 밝음</span>
+              <span>화면보다 어두움</span>
+            </div>
+            <div className="sliderName">사이즈</div>
+            <Slider
+              axis="x"
+              xstep={0.01}
+              xmin={0}
+              xmax={5}
+              x={sizeState.x}
+              onChange={({ x }) => setSizeState({ x: parseFloat(x.toFixed(2)) })}
+              styles={{
+                track: {
+                  backgroundColor: '#e5e5e5',
+                  height: '4px',
+                  width: '100%',
+                },
+                active: {
+                  backgroundColor: '#e5e5e5',
+                },
+                thumb: {
+                  backgroundColor: 'black',
+                  width: '8px',
+                  height: '8px',
+                },
+              }}
+            />
+            <div className="sliderValue">
+              <span>작은</span>
+              <span>큰</span>
+            </div>
+            <div className="sliderName">{data.acc_type || data.clothes_type ? '재질' : '발볼'}</div>
+            <Slider
+              axis="x"
+              xstep={0.01}
+              xmin={0}
+              xmax={5}
+              x={widthState.x}
+              onChange={({ x }) => setWidthState({ x: parseFloat(x.toFixed(2)) })}
+              styles={{
+                track: {
+                  backgroundColor: '#e5e5e5',
+                  height: '4px',
+                  width: '100%',
+                },
+                active: {
+                  backgroundColor: '#e5e5e5',
+                },
+                thumb: {
+                  backgroundColor: 'black',
+                  width: '8px',
+                  height: '8px',
+                },
+              }}
+            />
+            <div className="sliderValue">
+              <span>{data.acc_type || data.clothes_type ? '얇음' : '좁음'}</span>
+              <span>{data.acc_type || data.clothes_type ? '두꺼움' : '넓음'}</span>
+            </div>
+          </SliderWrapper>
+          <button onClick={() => sendReview()}>리뷰 제출</button>
         </ReviewContent>
       </ReviewBox>
       <SideCart>
