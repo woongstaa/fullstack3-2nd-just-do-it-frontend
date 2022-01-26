@@ -31,7 +31,7 @@ export default function DetailImg() {
 }
 
 const StyledDetailImg = styled.div`
-  width: calc(100% - 449px);
+  width: 1000px;
   position: relative;
   padding: 0 10px;
 `;
