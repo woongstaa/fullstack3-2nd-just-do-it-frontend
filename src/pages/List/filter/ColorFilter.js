@@ -1,14 +1,66 @@
 import styled from 'styled-components';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 function ColorFilter() {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const addFilter = id => {
+    navigate({ pathname: '/list', search: `${location.search}&colorId=${id}` });
+  };
   return (
     <FilterWrapper>
-      <div />
+      <Title>색상</Title>
+      <Content>
+        {color.map((e, i) => {
+          return (
+            <div className="btnWrapper" key={i} onClick={() => addFilter(e.id)}>
+              <button style={{ backgroundColor: e.hex }} />
+              <div className="name">{e.color}</div>
+            </div>
+          );
+        })}
+      </Content>
     </FilterWrapper>
   );
 }
 
-const FilterWrapper = styled.div``;
+const FilterWrapper = styled.div`
+  border-bottom: 1px solid gainsboro;
+  padding: 10px 0;
+`;
+
+const Title = styled.div`
+  font-weight: 600;
+  margin: 10px 0;
+`;
+const Content = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  text-align: center;
+
+  .btnWrapper {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    cursor: pointer;
+
+    button {
+      margin-bottom: 10px;
+      width: 24px;
+      height: 24px;
+      border: 0.1px solid #eeeeee;
+      border-radius: 100%;
+    }
+
+    .name {
+      padding: 0px;
+      margin-bottom: 10px;
+      font-size: 14px;
+    }
+  }
+`;
 
 const color = [
   {

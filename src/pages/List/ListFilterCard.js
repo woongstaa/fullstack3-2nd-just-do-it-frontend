@@ -2,13 +2,21 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import ColorFilter from './filter/ColorFilter';
 import SizeFilter from './filter/SizeFilter';
+import BrandFilter from './filter/BrandFilter';
+import IconFilter from './filter/IconFilter';
+import SubClothesFilter from './filter/SubClothesFilter';
+import SubAccFilter from './filter/SubAccFilter';
 
-function ListFilterCard({ filter, FILTER_URL, changeParams }) {
+function ListFilterCard({ filter }) {
   return (
     <FilterWrapper>
       <div className={filter ? 'notHide' : 'hide'}>
-        <SizeFilter FILTER_URL={FILTER_URL} changeParams={changeParams} />
-        <ColorFilter FILTER_URL={FILTER_URL} changeParams={changeParams} />
+        <SizeFilter />
+        <ColorFilter />
+        <BrandFilter />
+        <IconFilter />
+        <SubClothesFilter />
+        <SubAccFilter />
       </div>
     </FilterWrapper>
   );
