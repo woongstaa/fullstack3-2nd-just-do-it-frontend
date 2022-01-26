@@ -22,11 +22,11 @@ function ListCard({
   const [mouse, setMouse] = useState(false);
 
   return (
-    <ListCardWrapper>
-      <div className="cardWrapper" key={key}>
+    <ListCardWrapper key={styleCode}>
+      <div className="cardWrapper">
         {!isMember ? (
           <div className="imgWrapper">
-            <Link to={`/detail/${styleCode}`}>
+            <Link to={`product/detail/${styleCode}`}>
               <img alt={productName} src={imgUrl} />
             </Link>
           </div>
@@ -36,7 +36,7 @@ function ListCard({
             onMouseEnter={() => setMouse(true)}
             onMouseLeave={() => setMouse(false)}
           >
-            <Link to={`/detail/${styleCode}`}>
+            <Link to={`product/detail/${styleCode}`}>
               <div className="white" style={mouse ? { display: 'block' } : { display: 'none' }}>
                 <div className="comment">
                   나이키 멤버만
@@ -120,6 +120,7 @@ const ListCardWrapper = styled.div`
         position: absolute;
         background: rgba(255, 255, 255, 0.9);
         top: 0;
+        left: 0;
         z-index: 30;
         width: 100%;
         height: 100%;

@@ -60,6 +60,16 @@ export default function SNKRSDetailInfo() {
   //     })
   //     .then(res => setUserData(res.data));
   // }, []);
+  useEffect(() => {
+    fetch(`${process.env.REACT_APP_BASE_URL}/snkrs`, {
+      body: JSON.stringify({
+        user_id: userId,
+        style_code: params.styleCode,
+      }),
+    })
+      .then(res => res.json)
+      .then(res => setUserData(res.data));
+  }, []);
 
   return (
     <SNKRSDetailInfos>

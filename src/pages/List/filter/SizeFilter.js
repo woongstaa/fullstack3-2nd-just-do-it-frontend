@@ -1,16 +1,12 @@
 import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 function SizeFilter({ FILTER_URL, changeParams }) {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const addFilter = size => {
-    // let url = new URL(FILTER_URL);
-    let params = new URLSearchParams(window.location.search);
-    // // console.log(url);
-    // console.log(params.getAll('categoryId'));
-    // params.append('size', 220);
-    params.append('size', `${size}`);
+    navigate({ pathname: '/list', search: `${location.search}&size=${size}` });
   };
 
   return (
@@ -19,7 +15,7 @@ function SizeFilter({ FILTER_URL, changeParams }) {
       <Content>
         {size.map((e, i) => {
           return (
-            <button key={i} onClick={() => addFilter()}>
+            <button key={i} onClick={() => addFilter(e.size)}>
               {e.size}
             </button>
           );

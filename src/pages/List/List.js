@@ -13,10 +13,18 @@ import { useLocation, useParams } from 'react-router-dom';
 function List() {
   const [filter, setFilter] = useState(true);
   const [listData, setListData] = useState([]);
+  const [size, setSize] = useState();
+  const [colorId, setColorId] = useState();
+  const [subBrandName, setSubBrandName] = useState();
+  const [subIconName, setSubIconName] = useState();
+  const [subClothesName, setSubClothesName] = useState();
+  const [subAccessoriesName, setSubAccessoriesName] = useState();
 
   const params = useParams();
   const location = useLocation().search;
   const query = new URLSearchParams(location);
+
+  const currURL = window.location.search;
 
   // &size=${params.size}&colorId=${params.colorId}&subBrandName=${
   //   params.subBrandName
@@ -24,9 +32,7 @@ function List() {
   //   params.subClothesName
   // }&subAccessoriesName=${params.subAccessoriesName}
 
-  const URL = `${GET_LIST_API}?genderId=${query.get('genderId')}&categoryId=${query.get(
-    'categoryId'
-  )}`;
+  const URL = `${GET_LIST_API}${currURL}`;
 
   const FILTER_URL = `${process.env.REACT_APP_BASE_FRONT_URL}?genderId=${query.get(
     'genderId'
@@ -41,10 +47,11 @@ function List() {
     }).then(response => {
       setListData(response.data.list);
     });
-  }, []);
+  }, [URL]);
 
   return (
     <>
+      {console.log(currURL)}
       <Top />
       <TopNav />
       <ListWrapper>
