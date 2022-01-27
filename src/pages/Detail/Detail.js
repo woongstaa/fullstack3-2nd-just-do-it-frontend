@@ -8,6 +8,7 @@ import Footer from '../../components/Footer';
 const DetailSection = styled.section`
   display: flex;
   margin: 20px 200px;
+  font-family: ${({ theme }) => theme.fontContent};
 `;
 function Detail() {
   return (

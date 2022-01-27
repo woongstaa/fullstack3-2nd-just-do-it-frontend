@@ -26,9 +26,9 @@ function ListCard({
       <div className="cardWrapper">
         {!isMember ? (
           <div className="imgWrapper">
-            <Link to={`/product/detail/${styleCode}`}>
+            <a href={`/product/detail/${styleCode}`}>
               <img alt={productName} src={imgUrl} />
-            </Link>
+            </a>
           </div>
         ) : (
           <div
@@ -36,7 +36,7 @@ function ListCard({
             onMouseEnter={() => setMouse(true)}
             onMouseLeave={() => setMouse(false)}
           >
-            <Link to={`/product/detail/${styleCode}`}>
+            <a href={`/product/detail/${styleCode}`}>
               <div className="white" style={mouse ? { display: 'block' } : { display: 'none' }}>
                 <div className="comment">
                   나이키 멤버만
@@ -47,7 +47,7 @@ function ListCard({
                 <IoIosLock className="icon" />
               </button>
               <img alt={productName} src={imgUrl} />
-            </Link>
+            </a>
           </div>
         )}
         <div className="detailWrapper">
@@ -96,6 +96,7 @@ const ListCardWrapper = styled.div`
       justify-content: center;
       align-items: center;
       background-color: #efefef;
+      object-fit: scale-down;
       cursor: pointer;
 
       img {

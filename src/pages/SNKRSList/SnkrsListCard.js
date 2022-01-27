@@ -15,18 +15,7 @@ function SnkrsListCard({ snkrsName, imgUrl, isOpen, key, setBtnActive, grid }) {
             <div className="imgWrapper">
               <img src={imgUrl} alt={snkrsName} />
             </div>
-            {/* {btnActive ? (
-            <div className="btnWrapper">
-            <button>Draw</button>
-            </div>
-            ) : (
-              <div className="nameWrapper">
-              <div className="cateName">{element.productCate}</div>
-              <div className="itemName">{element.productName}</div>
-              </div>
-            )} */}
             <div className="nameWrapper">
-              {/* <div className="cateName">{element.productCate}</div> */}
               <div className="itemName">{snkrsName}</div>
             </div>
           </Link>

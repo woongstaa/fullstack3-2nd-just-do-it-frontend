@@ -21,7 +21,7 @@ function SignUp() {
             <a href={kauthUrl}>
               <button className="kakao">
                 <RiKakaoTalkFill className="kakaoIcon" />
-                카카오톡 로그인
+                카카오톡 회원가입
               </button>
             </a>
           </div>

@@ -20,8 +20,8 @@ export default function SNKRSDetail() {
 
 const DetailSection = styled.section`
   display: flex;
-  margin-top: 100px;
-  margin-bottom: 200px;
+  margin: 100px 3vw;
+  font-family: ${({ theme }) => theme.fontContent};
 
   @media screen and (max-width: 640px) {
     flex-direction: column;
