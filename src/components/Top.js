@@ -61,7 +61,7 @@ const TopWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: gainsboro;
+  background-color: #f2f2f2;
   padding: 0.5vh 3vw;
   font-family: ${props => props.theme.fontContent};
 

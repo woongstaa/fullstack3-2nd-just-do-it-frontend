@@ -122,7 +122,7 @@ const SignInWrapper = styled.div`
           margin-bottom: 16px;
           font-size: 12px;
           padding: 10px;
-          border: 1px solid gainsboro;
+          border: 1px solid #dfdfdf;
         }
       }
 
@@ -132,6 +132,7 @@ const SignInWrapper = styled.div`
         justify-content: space-between;
         font-size: 12px;
         margin-bottom: 20px;
+        color: #979797;
 
         .checkBox {
           display: flex;
@@ -144,6 +145,7 @@ const SignInWrapper = styled.div`
         margin-bottom: 5px;
         border: none;
         padding: 10px;
+        background-color: #f2f2f2;
       }
 
       a {
@@ -166,7 +168,7 @@ const SignInWrapper = styled.div`
       .goSignUp {
         margin-top: 10px;
         font-size: 12px;
-        color: gray;
+        color: #979797;
 
         a {
           color: black;

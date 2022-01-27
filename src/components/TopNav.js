@@ -218,7 +218,7 @@ const NavRight = styled.div`
   .search {
     border-radius: 100px;
     border: none;
-    background-color: gainsboro;
+    background-color: #f2f2f2;
     padding: 8px 40px;
     height: 20px;
     width: 90px;
@@ -240,7 +240,7 @@ const NavRight = styled.div`
     left: 5px;
     top: 5px;
     padding: 0;
-    background-color: gainsboro;
+    background-color: #f2f2f2;
   }
 
   .iconMobile {

@@ -62,7 +62,7 @@ export default function SNKRSDetailInfo() {
         style_code: params.styleCode,
       })
       .then(res => setUserData(res.data.data));
-  }, [openModal]);
+  }, []);
 
   return (
     <SNKRSDetailInfos>
@@ -74,7 +74,9 @@ export default function SNKRSDetailInfo() {
             <GrClose className="SNKRSModalIcon" onClick={() => closeModal()} />
             {userData &&
               userData.map((obj, index) => {
-                return (
+                return Object.length === 0 ? (
+                  <div>다음에 진행되는 드로우에 참여해주세요</div>
+                ) : (
                   <UserDataWrapper key={index}>
                     <div className="content">
                       <div className="title">
