@@ -7,6 +7,7 @@ import SNKRSDetail from './pages/SNKRSDetail/SNKRSDetail';
 import Auth from './pages/Login/Auth';
 import Login from './pages/Login/Login';
 import Main from './pages/Main/Main';
+import Cart from './pages/Cart/Cart';
 
 function Router() {
   return (
@@ -20,6 +21,7 @@ function Router() {
         <Route path="/oauth" element={<Auth />} />
         <Route path="/login" element={<Login />} />
         <Route path="/" element={<Main />} />
+        <Route path="/cart" element={<Cart />} />
       </Routes>
     </BrowserRouter>
   );

@@ -100,9 +100,11 @@ function TopNav() {
             <button>
               <FiHeart className="icon" id="likeBtn" />
             </button>
-            <button>
-              <FiShoppingBag className="icon" id="iconBag" />
-            </button>
+            <a href="/cart">
+              <button>
+                <FiShoppingBag className="icon" id="iconBag" style={{ cursor: 'pointer' }} />
+              </button>
+            </a>
             <button className="iconMobile">
               <FiMenu />
             </button>

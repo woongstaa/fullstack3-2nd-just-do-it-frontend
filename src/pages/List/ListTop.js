@@ -45,9 +45,6 @@ function ListTop({ filter, setFilter, query, sortMethod, setSortMethod }) {
 
   return (
     <TopWrapper>
-      {console.log(sortMethod)}
-      {console.log(sortName)}
-      {console.log(sort)}
       <div className="topLeft">
         <div className="subTitle">
           <span>{cate}</span>

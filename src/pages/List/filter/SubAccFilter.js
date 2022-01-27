@@ -16,7 +16,7 @@ function SubAccFilter() {
           return (
             <div className="box" key={i}>
               <input type="checkbox" id={`a${e.id}`} onClick={() => addFilter(e.name)} />
-              <label for={`a${e.id}`}>{e.name}</label>
+              <label htmlFor={`a${e.id}`}>{e.name}</label>
             </div>
           );
         })}

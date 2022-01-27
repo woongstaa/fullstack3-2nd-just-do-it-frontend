@@ -17,7 +17,7 @@ function SubClothesFilter() {
           return (
             <div className="box" key={i}>
               <input type="checkbox" id={`c${e.id}`} onClick={() => addFilter(e.name)} />
-              <label for={`c${e.id}`}>{e.name}</label>
+              <label htmlFor={`c${e.id}`}>{e.name}</label>
             </div>
           );
         })}
