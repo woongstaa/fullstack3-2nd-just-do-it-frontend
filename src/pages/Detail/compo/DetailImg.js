@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 const StyledDetailImg = styled.div`
-  width: calc(100% - 449px);
+  width: calc(100% - 25vw);
   position: relative;
   padding: 0 10px;
 
