@@ -17,7 +17,7 @@ function IconFilter() {
           return (
             <div className="box" key={i}>
               <input type="checkbox" id={`i${e.id}`} onClick={() => addFilter(e.name)} />
-              <label for={`i${e.id}`}>{e.name}</label>
+              <label htmlFor={`i${e.id}`}>{e.name}</label>
             </div>
           );
         })}

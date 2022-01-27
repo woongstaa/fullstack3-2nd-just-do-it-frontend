@@ -17,7 +17,7 @@ function BrandFilter() {
           return (
             <div className="box" key={i}>
               <input type="checkbox" id={`b${e.id}`} onClick={() => addFilter(e.name)} />
-              <label for={`b${e.id}`}>{e.name}</label>
+              <label htmlFor={`b${e.id}`}>{e.name}</label>
             </div>
           );
         })}

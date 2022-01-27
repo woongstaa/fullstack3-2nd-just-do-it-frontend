@@ -52,7 +52,7 @@ function SnkrsTop({ grid, setGrid }) {
       </div>
       <div className="secondHead">
         <Link to="/snkrs">
-          <img src="/images/snkrs.png" alt="snkrs" />
+          <img src="/Images/snkrs.png" alt="snkrs" />
         </Link>
         <div className="secondCenter">
           <div className="centerMenu">Feed</div>

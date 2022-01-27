@@ -38,7 +38,6 @@ function List() {
 
   return (
     <>
-      {console.log(currURL)}
       <Top />
       <TopNav />
       <ListWrapper>
@@ -55,7 +54,7 @@ function List() {
             {listData.map((element, index) => {
               return (
                 <ListCard
-                  key={element.styleCode}
+                  key={index}
                   categoryName={element.categoryName}
                   genderName={element.genderName}
                   productName={element.productName}

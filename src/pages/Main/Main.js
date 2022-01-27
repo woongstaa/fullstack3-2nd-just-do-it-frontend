@@ -10,8 +10,8 @@ function Main() {
       <TopNav />
       <MainWrapper>
         <First>
-          <img className="pc" src="/images/Main/1/1-1.jpeg" alt="1-1" />
-          <img className="mobile" src="/images/Main/1/1-2.jpeg" alt="1-2" />
+          <img className="pc" src="/Images/Main/1/1-1.jpeg" alt="1-1" />
+          <img className="mobile" src="/Images/Main/1/1-2.jpeg" alt="1-2" />
           <FirstContent>
             <div className="title">가능성은 지금부터</div>
             <div className="content">매일 공개되는 새로운 미션에 도전하고</div>
@@ -25,8 +25,8 @@ function Main() {
           </FirstContent>
         </First>
         <Second>
-          <img className="pc" src="/images/Main/2/2-1.jpeg" alt="2-1" />
-          <img className="mobile" src="/images/Main/2/2-2.jpeg" alt="2-2" />
+          <img className="pc" src="/Images/Main/2/2-1.jpeg" alt="2-1" />
+          <img className="mobile" src="/Images/Main/2/2-2.jpeg" alt="2-2" />
           <SecondContent>
             <div className="title">2022 나이키 X T1 LCK 컬렉션</div>
             <div className="content">실제 선수들이 착용하는 유니폼을 입고,</div>
@@ -38,8 +38,8 @@ function Main() {
           </SecondContent>
         </Second>
         <Third>
-          <img className="pc" src="/images/Main/3/3-1.gif" alt="3-1" />
-          <img className="mobile" src="/images/Main/3/3-2.gif" alt="3-2" />
+          <img className="pc" src="/Images/Main/3/3-1.gif" alt="3-1" />
+          <img className="mobile" src="/Images/Main/3/3-2.gif" alt="3-2" />
           <ThirdContent>
             <div className="title">나이키 테크 팩</div>
             <div className="content">
@@ -52,8 +52,8 @@ function Main() {
           </ThirdContent>
         </Third>
         <Forth>
-          <img className="pc" src="/images/Main/4/4-1.gif" alt="4-1" />
-          <img className="mobile" src="/images/Main/4/4-2.gif" alt="4-2" />
+          <img className="pc" src="/Images/Main/4/4-1.gif" alt="4-1" />
+          <img className="mobile" src="/Images/Main/4/4-2.gif" alt="4-2" />
           <ForthContent>
             <div className="title">나이키 블레이저 로우 '77 점보</div>
             <div className="content">과감하고 색다른 스타일을 완성해보세요.</div>
@@ -63,8 +63,8 @@ function Main() {
           </ForthContent>
         </Forth>
         <Fifth>
-          <img className="pc" src="/images/Main/5/5-1.png" alt="5-1" />
-          <img className="mobile" src="/images/Main/5/5-2.png" alt="5-2" />
+          <img className="pc" src="/Images/Main/5/5-1.png" alt="5-1" />
+          <img className="mobile" src="/Images/Main/5/5-2.png" alt="5-2" />
           <FifthContent>
             <div className="title">나이키 ACG 가이드</div>
             <div className="content">녹색 잔디와 꽃이 함께하는 아이슬란드의 봄을 만나보세요</div>

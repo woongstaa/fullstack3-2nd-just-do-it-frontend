@@ -4,7 +4,7 @@ import { IoIosLock } from 'react-icons/io';
 import { useState } from 'react';
 
 function ListCard({
-  key,
+  index,
   categoryName,
   genderName,
   imgUrl,
@@ -22,14 +22,14 @@ function ListCard({
   const [mouse, setMouse] = useState(false);
 
   return (
-    <ListCardWrapper key={styleCode}>
+    <ListCardWrapper key={index}>
       <div className="cardWrapper">
         {!isMember ? (
-          <div className="imgWrapper">
-            <a href={`/product/detail/${styleCode}`}>
+          <a href={`/product/detail/${styleCode}`}>
+            <div className="imgWrapper">
               <img alt={productName} src={imgUrl} />
-            </a>
-          </div>
+            </div>
+          </a>
         ) : (
           <div
             className="imgWrapperForMember"

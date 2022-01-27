@@ -66,11 +66,10 @@ export default function SNKRSDetailInfo() {
 
   return (
     <SNKRSDetailInfos>
-      {console.log(userData)}
       {openModal ? ( // 모달 창
         <ModalBackground onClick={() => closeModal()}>
           <ModalContainer onClick={e => e.stopPropagation()}>
-            <div className="title">Result</div>
+            <div className="title">- RESULT -</div>
             <GrClose className="SNKRSModalIcon" onClick={() => closeModal()} />
             {userData &&
               userData.map((obj, index) => {
@@ -81,14 +80,17 @@ export default function SNKRSDetailInfo() {
                         {obj.create_at.substr(0, 10) +
                           '일  ' +
                           obj.create_at.substr(11, 5) +
-                          `분의 ${obj.style_code} 추첨은 `}
-                        <span className="ing">진행 중</span>입니다!
+                          `분의 `}
+                        <span className="products"> '{obj.product_name}'</span> 추첨은
+                        <span className="ing"> '진행 중'</span>입니다!
                       </div>
                     ) : (
                       <div className="content">
                         <div className="title">
-                          <span>{obj.name}님</span>의 {obj.count}회차 응모결과 (
-                          {obj.create_at.substr(0, 10) + ' ' + obj.create_at.substr(11, 5)})
+                          <span>{obj.name}님</span>의 {obj.count}회차 응모결과
+                          <div className="titleTime">
+                            ({obj.create_at.substr(0, 10) + ' ' + obj.create_at.substr(11, 5)})
+                          </div>
                         </div>
                         <div>
                           {obj.is_winner ? (
@@ -96,7 +98,8 @@ export default function SNKRSDetailInfo() {
                               <div>🎉 축하합니다 🎉</div>
                               <div>
                                 <div>
-                                  <span>{obj.name}님</span>은 {obj.style_code}에{' '}
+                                  <span>{obj.name}님</span>은
+                                  <span className="products"> '{obj.product_name}'</span>에
                                 </div>
                                 <div>
                                   <span className="win">당첨</span>
@@ -107,7 +110,7 @@ export default function SNKRSDetailInfo() {
                           ) : (
                             <div className="lose">
                               <div>
-                                아쉽게도 <span>{obj.name}님</span>은{' '}
+                                아쉽게도 <span>{obj.name}님</span>은
                                 <span className="lose">당첨되지 않았습니다</span>
                               </div>
                             </div>
@@ -272,6 +275,9 @@ const ModalContainer = styled.div`
     margin-top: 10px;
     font-size: 30px;
     font-weight: 700;
+    .titleTime {
+      font-size: 15px;
+    }
   }
 
   .SNKRSModalIcon {
@@ -305,7 +311,9 @@ const UserDataWrapper = styled.div`
       font-weight: 900;
     }
   }
-
+  .products {
+    color: #567ace;
+  }
   .content {
     overflow-y: auto;
     border-bottom: 1px solid #dedede;
