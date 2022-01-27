@@ -2,10 +2,8 @@ import Footer from '../../components/Footer';
 import styled from 'styled-components';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import SignIn from '../Login/SignIn';
 import axios from 'axios';
 import { GET_SNKRS_LIST_API } from '../../config';
-import SnkrsListCard from './SnkrsListCard';
 import SnkrsTop from './SnkrsTop';
 
 function SnkrsList() {
@@ -49,18 +47,6 @@ function SnkrsList() {
             );
           })}
         </div>
-        {/* {listData.map((element, index) => {
-            return (
-              <SnkrsListCard
-                key={index}
-                snkrsName={element.snkrsName}
-                imgUrl={element.imgUrl}
-                isOpen={element.isOpen}
-                setBtnActive={setBtnActive}
-                grid={grid}
-              />
-            );
-          })} */}
       </ListBody>
       <Footer />
     </ListWrapper>

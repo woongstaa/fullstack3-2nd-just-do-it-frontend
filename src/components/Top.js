@@ -44,8 +44,12 @@ function Top() {
             <li>멤버 가입</li>
           </Link>
           <li onClick={makeMember}>프리미엄 멤버 가입</li>
-          {user_id ? <li>{name}님</li> : <li onClick={() => setModal(true)}>로그인</li>}
-          {user_id ? <li onClick={() => logOut()}>로그아웃</li> : null}
+          {/* {user_id ? <li>{name}님</li> : <li onClick={() => setModal(true)}>로그인</li>} */}
+          {user_id ? (
+            <li onClick={() => logOut()}>로그아웃</li>
+          ) : (
+            <li onClick={() => setModal(true)}>로그인</li>
+          )}
         </TopRight>
       </TopWrapper>
     </>

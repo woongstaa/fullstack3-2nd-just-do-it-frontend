@@ -9,6 +9,13 @@ import SignIn from '../Login/SignIn';
 
 function SnkrsTop({ grid, setGrid }) {
   const [modal, setModal] = useState(false);
+  const user_id = localStorage.getItem('token');
+
+  const logOut = () => {
+    localStorage.removeItem('token');
+    window.location.reload();
+  };
+
   return (
     <ListHeader>
       {modal && <SignIn modal={modal} setModal={setModal} />}
@@ -25,7 +32,11 @@ function SnkrsTop({ grid, setGrid }) {
           <div className="rightRight">
             <Link to="/signup">회원가입</Link>
             <div className="center">/</div>
-            <div onClick={() => setModal(true)}>로그인</div>
+            {user_id ? (
+              <div onClick={() => logOut()}>로그아웃</div>
+            ) : (
+              <div onClick={() => setModal(true)}>로그인</div>
+            )}
           </div>
           <div className="rightRight">고객센터</div>
           <span>
@@ -60,6 +71,7 @@ const ListHeader = styled.div`
   display: flex;
   flex-direction: column;
   font-size: 12px;
+  font-family: ${({ theme }) => theme.fontContent};
 
   a {
     text-decoration: none;

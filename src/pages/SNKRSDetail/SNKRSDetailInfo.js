@@ -62,12 +62,11 @@ export default function SNKRSDetailInfo() {
         style_code: params.styleCode,
       })
       .then(res => setUserData(res.data.data));
-  }, []);
+  }, [openModal]);
 
-  // [res.data.data.length - 1]
   return (
     <SNKRSDetailInfos>
-      {/* {console.log(userData[1])} */}
+      {console.log(userData)}
       {openModal ? ( // 모달 창
         <ModalBackground onClick={() => closeModal()}>
           <ModalContainer onClick={e => e.stopPropagation()}>
@@ -77,25 +76,33 @@ export default function SNKRSDetailInfo() {
               userData.map((obj, index) => {
                 return (
                   <UserDataWrapper key={index}>
-                    <div>
-                      <span>{obj.name}님</span>의 응모결과
-                    </div>
                     <div className="content">
-                      {obj.is_winner ? (
-                        <div className="win">
-                          <div>🎉 축하합니다 🎉</div>
+                      <div className="title">
+                        <span>{obj.name}님</span>의 {obj.count}번째 응모결과
+                      </div>
+                      <div>
+                        {obj.is_winner ? (
                           <div>
-                            <span>{obj.name}님</span>은 {obj.style_code}에 당첨되셨습니다!
+                            <div>🎉 축하합니다 🎉</div>
+                            <div>
+                              <div>
+                                <span>{obj.name}님</span>은 {obj.style_code}에{' '}
+                              </div>
+                              <div>
+                                <span className="win">당첨</span>
+                                되셨습니다!
+                              </div>
+                            </div>
                           </div>
-                        </div>
-                      ) : (
-                        <div className="lose">
-                          <div>
-                            아쉽게도 <span>{obj.name}님</span>은 당첨되지 않았습니다
+                        ) : (
+                          <div className="lose">
+                            <div>
+                              아쉽게도 <span>{obj.name}님</span>은{' '}
+                              <span className="lose">당첨되지 않았습니다</span>
+                            </div>
                           </div>
-                          <div>다음 드로우에 도전하세요!</div>
-                        </div>
-                      )}
+                        )}
+                      </div>
                     </div>
                   </UserDataWrapper>
                 );
@@ -139,7 +146,7 @@ export default function SNKRSDetailInfo() {
         </select>
       </SizeSelection>
       {data.is_open === 0 ? (
-        <button onClick={() => draw()} disabled={true}>
+        <button onClick={() => draw()} disabled={true} style={{ opacity: 0.5 }}>
           Comming SOON!
         </button>
       ) : (
@@ -148,7 +155,13 @@ export default function SNKRSDetailInfo() {
         </button>
       )}
 
-      <button onClick={() => setOpenModal(true)}>추첨 확인</button>
+      {userId ? (
+        <button onClick={() => setOpenModal(true)}>추첨 확인</button>
+      ) : (
+        <button onClick={() => setOpenModal(false)} style={{ opacity: 0.5 }}>
+          추첨 확인
+        </button>
+      )}
     </SNKRSDetailInfos>
   );
 }
@@ -156,6 +169,7 @@ export default function SNKRSDetailInfo() {
 const SNKRSDetailInfos = styled.div`
   display: flex;
   flex-direction: column;
+  align-items: center;
   width: 30%;
   margin: 0 50px;
 
@@ -173,7 +187,7 @@ const SNKRSDetailInfos = styled.div`
   }
 
   button {
-    width: 100%;
+    width: 260px;
     margin-top: 20px;
     padding: 16px 1.5em;
     border-radius: 30px;
@@ -184,7 +198,7 @@ const SNKRSDetailInfos = styled.div`
     cursor: pointer;
 
     &:hover {
-      background: gray;
+      opacity: 0.8;
     }
   }
 
@@ -210,7 +224,7 @@ const SNKRSDetailInfosPrice = styled.div`
 const SizeSelection = styled.div`
   text-align: center;
   select {
-    width: 80%;
+    width: 100%;
     font-size: 15px;
     padding: 8px 16px;
     margin-bottom: 30px;
@@ -242,11 +256,11 @@ const ModalContainer = styled.div`
   border-radius: 24px;
   box-shadow: 0 0 10px rgb(0 0 0 / 30%);
   text-align: center;
-  overflow-y: hidden;
 
   .title {
-    margin-top: 50px;
+    margin-top: 10px;
     font-size: 30px;
+    font-weight: 700;
   }
 
   .SNKRSModalIcon {
@@ -260,21 +274,31 @@ const ModalContainer = styled.div`
 `;
 
 const UserDataWrapper = styled.div`
-  margin-top: 40%;
-  font-size: 20px;
+  margin-top: 20px;
+  font-size: 16px;
 
   span {
     font-weight: 700;
   }
 
   div {
-    padding: 10px;
-  }
-  .winResult.active {
-    color: #c3a923;
+    padding: 7px;
   }
 
-  .winResult {
-    color: #b74141;
+  .content {
+    overflow-y: auto;
+    border-bottom: 1px solid #dedede;
+
+    .title {
+      font-size: 18px;
+    }
+
+    .win {
+      color: #c3a923;
+    }
+
+    .lose {
+      color: #b74141;
+    }
   }
 `;

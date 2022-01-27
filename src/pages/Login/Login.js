@@ -7,7 +7,6 @@ function Login() {
   const [email, setEmail] = useState();
   const [name, setName] = useState();
   const [token, setToken] = useState();
-
   const navigate = useNavigate();
 
   const getLocal = async () => {
@@ -19,12 +18,12 @@ function Login() {
     // 사용자 정보 변수에 저장
     setEmail(data.kakao_account.email);
     setName(data.properties.nickname);
+    alert('반갑습니다!');
   };
 
   useEffect(() => {
     getLocal();
   }, []);
-
   axios
     .post(POST_SIGN_IN_API, {
       name: name,
@@ -33,7 +32,9 @@ function Login() {
     .then(res => {
       setToken(res.data.token);
       localStorage.setItem('token', token);
-      navigate(-2);
+    })
+    .then(() => {
+      navigate('/');
     });
 
   return null;
