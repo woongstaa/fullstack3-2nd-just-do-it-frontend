@@ -13,18 +13,13 @@ import { useLocation, useParams } from 'react-router-dom';
 function List() {
   const [filter, setFilter] = useState(true);
   const [listData, setListData] = useState([]);
-  const [size, setSize] = useState();
-  const [colorId, setColorId] = useState();
-  const [subBrandName, setSubBrandName] = useState();
-  const [subIconName, setSubIconName] = useState();
-  const [subClothesName, setSubClothesName] = useState();
-  const [subAccessoriesName, setSubAccessoriesName] = useState();
+  const [sortMethod, setSortMethod] = useState(0);
 
   const params = useParams();
   const location = useLocation().search;
   const query = new URLSearchParams(location);
   const currURL = window.location.search;
-  const URL = `${GET_LIST_API}${currURL}`;
+  const URL = `${GET_LIST_API}${currURL}&sortMethod=${sortMethod}`;
 
   const FILTER_URL = `${process.env.REACT_APP_BASE_FRONT_URL}?genderId=${query.get(
     'genderId'
@@ -47,7 +42,13 @@ function List() {
       <Top />
       <TopNav />
       <ListWrapper>
-        <ListTop filter={filter} setFilter={setFilter} query={query} />
+        <ListTop
+          filter={filter}
+          setFilter={setFilter}
+          query={query}
+          sortMethod={sortMethod}
+          setSortMethod={setSortMethod}
+        />
         <ListBody>
           <ListFilterCard filter={filter} FILTER_URL={FILTER_URL} changeParams={changeParams} />
           <ListCardWrapper>

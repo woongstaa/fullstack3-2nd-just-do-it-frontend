@@ -108,6 +108,7 @@ const SnsSignUp = styled.div`
     }
   }
 `;
+
 const NormalSignUp = styled.div`
   div {
     display: flex;
@@ -117,6 +118,7 @@ const NormalSignUp = styled.div`
       font-size: 12px;
       padding: 6px;
       margin-bottom: 10px;
+      border: 1px solid #dfdfdf;
     }
   }
 
