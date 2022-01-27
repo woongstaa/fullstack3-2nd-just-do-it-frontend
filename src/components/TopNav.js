@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { SiNike } from 'react-icons/si';
 import { FiSearch, FiHeart, FiShoppingBag, FiMenu } from 'react-icons/fi';
-import { Link } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { useEffect, useRef, useState } from 'react';
 import MenModal from './Modals/MenModal';
 import WomenModal from './Modals/WomenModal';
@@ -26,7 +26,9 @@ function TopNav() {
   const [kidModalOn, setKidModalOn] = useState(false);
   const [saleModalOn, setSaleModalOn] = useState(false);
 
-  // useEffect({}, [menModalOn, womenModalOn, kidModalOn, saleModalOn]);
+  const [keyword, setKeyword] = useState();
+  const navigate = useNavigate();
+
   const [hide, setHide] = useState(false);
   const [pageY, setPageY] = useState(0);
   const documentRef = useRef(document);
@@ -38,6 +40,7 @@ function TopNav() {
     setHide(hide);
     setPageY(pageYOffset);
   };
+
   const throttleScroll = throttle(handleScroll, 50);
 
   useEffect(() => {
@@ -45,6 +48,13 @@ function TopNav() {
     return () => documentRef.current.removeEventListener('scroll', throttleScroll);
   }, [pageY]);
 
+  const keywordInput = event => {
+    setKeyword(event.target.value);
+  };
+
+  const searching = event => {
+    navigate(`/list?search=${keyword}`);
+  };
   return (
     <>
       {menModalOn ? <MenModal setMenModalOn={setMenModalOn} /> : null}
@@ -77,7 +87,12 @@ function TopNav() {
           </NavCenter>
           <NavRight>
             <span>
-              <input className="search" placeholder="검색" />
+              <input
+                className="search"
+                placeholder="검색"
+                onChange={keywordInput}
+                onKeyPress={() => searching()}
+              />
             </span>
             <button id="searchIcon">
               <FiSearch className="icon" />
@@ -103,7 +118,6 @@ function TopNav() {
 const TopContainer = styled.div`
   position: relative;
   width: 100%;
-  /* height: 80px; */
 `;
 
 const TopNavWrapper = styled.div`
@@ -113,8 +127,6 @@ const TopNavWrapper = styled.div`
   align-items: center;
   padding: 0 3vw;
   position: sticky;
-  /* position: fixed; */
-  /* top: 40px; */
   left: 0;
   height: 80px;
   width: 100%;
@@ -160,51 +172,6 @@ const NavCenter = styled.div`
     }
   }
 
-  /* .main {
-    padding: 10px;
-
-    &::after {
-      content: '';
-      width: 0;
-      height: 10px;
-      position: absolute;
-      left: 1rem;
-      bottom: 0.8em;
-      transition: width 200ms ease-in;
-    }
-
-    &:hover::after,
-    &:focus::after {
-      width: 80%;
-    }
-
-    &:hover ul,
-    &:focus ul {
-      opacity: 1;
-      visibility: visible;
-    }
-
-    .sub {
-      position: absolute;
-      top: 40px;
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-      width: 100vw;
-      opacity: 0;
-      visibility: hidden;
-      transition: opacity 200ms ease-in-out;
-
-      li {
-        padding: 10px;
-
-        &:hover,
-        &:focus {
-          background-color: blue;
-        }
-      }
-    }
-  } */
   @media screen and (max-width: 640px) {
     display: none;
   }

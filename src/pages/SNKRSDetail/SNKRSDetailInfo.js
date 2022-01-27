@@ -62,7 +62,7 @@ export default function SNKRSDetailInfo() {
         style_code: params.styleCode,
       })
       .then(res => setUserData(res.data.data));
-  }, []);
+  }, [openModal]);
 
   return (
     <SNKRSDetailInfos>
@@ -74,38 +74,47 @@ export default function SNKRSDetailInfo() {
             <GrClose className="SNKRSModalIcon" onClick={() => closeModal()} />
             {userData &&
               userData.map((obj, index) => {
-                return Object.length === 0 ? (
-                  <div>다음에 진행되는 드로우에 참여해주세요</div>
-                ) : (
+                return (
                   <UserDataWrapper key={index}>
-                    <div className="content">
-                      <div className="title">
-                        <span>{obj.name}님</span>의 {obj.count}번째 응모결과
+                    {obj.count === 0 ? (
+                      <div className="wait">
+                        {obj.create_at.substr(0, 10) +
+                          '일  ' +
+                          obj.create_at.substr(11, 5) +
+                          `분의 ${obj.style_code} 추첨은 `}
+                        <span className="ing">진행 중</span>입니다!
                       </div>
-                      <div>
-                        {obj.is_winner ? (
-                          <div>
-                            <div>🎉 축하합니다 🎉</div>
+                    ) : (
+                      <div className="content">
+                        <div className="title">
+                          <span>{obj.name}님</span>의 {obj.count}회차 응모결과 (
+                          {obj.create_at.substr(0, 10) + ' ' + obj.create_at.substr(11, 5)})
+                        </div>
+                        <div>
+                          {obj.is_winner ? (
                             <div>
+                              <div>🎉 축하합니다 🎉</div>
                               <div>
-                                <span>{obj.name}님</span>은 {obj.style_code}에{' '}
-                              </div>
-                              <div>
-                                <span className="win">당첨</span>
-                                되셨습니다!
+                                <div>
+                                  <span>{obj.name}님</span>은 {obj.style_code}에{' '}
+                                </div>
+                                <div>
+                                  <span className="win">당첨</span>
+                                  되셨습니다!
+                                </div>
                               </div>
                             </div>
-                          </div>
-                        ) : (
-                          <div className="lose">
-                            <div>
-                              아쉽게도 <span>{obj.name}님</span>은{' '}
-                              <span className="lose">당첨되지 않았습니다</span>
+                          ) : (
+                            <div className="lose">
+                              <div>
+                                아쉽게도 <span>{obj.name}님</span>은{' '}
+                                <span className="lose">당첨되지 않았습니다</span>
+                              </div>
                             </div>
-                          </div>
-                        )}
+                          )}
+                        </div>
                       </div>
-                    </div>
+                    )}
                   </UserDataWrapper>
                 );
               })}
@@ -285,6 +294,16 @@ const UserDataWrapper = styled.div`
 
   div {
     padding: 7px;
+  }
+
+  .wait {
+    border-bottom: 1px solid #dedede;
+    padding: 30px 0;
+
+    .ing {
+      color: #567ace;
+      font-weight: 900;
+    }
   }
 
   .content {
