@@ -6,7 +6,7 @@ function SizeFilter({ FILTER_URL, changeParams }) {
   const location = useLocation();
 
   const addFilter = size => {
-    navigate({ pathname: '/list', search: `${location.search}&sizes=${size}` });
+    navigate({ pathname: '/list', search: `${location.search}&sizeName="${size}"` });
   };
 
   return (
