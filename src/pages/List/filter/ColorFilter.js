@@ -34,6 +34,7 @@ const Title = styled.div`
   font-weight: 600;
   margin: 10px 0;
 `;
+
 const Content = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
@@ -52,6 +53,7 @@ const Content = styled.div`
       height: 24px;
       border: 0.1px solid #eeeeee;
       border-radius: 100%;
+      cursor: pointer;
     }
 
     .name {

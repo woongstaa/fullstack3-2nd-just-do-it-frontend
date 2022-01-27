@@ -112,6 +112,7 @@ const MainWrapper = styled.div`
     border-radius: 20px;
     font-size: 14px;
   }
+
   @media screen and (max-width: 640px) {
     .pc {
       display: none;
@@ -135,7 +136,9 @@ const First = styled.div`
     display: block;
   }
 `;
+
 const FirstContent = styled.div`
+  margin-bottom: 60px;
   text-align: center;
 `;
 
@@ -154,6 +157,7 @@ const Second = styled.div`
 `;
 
 const SecondContent = styled.div`
+  margin-bottom: 60px;
   text-align: center;
 `;
 
@@ -172,6 +176,7 @@ const Third = styled.div`
 `;
 
 const ThirdContent = styled.div`
+  margin-bottom: 60px;
   text-align: center;
 `;
 
@@ -190,6 +195,7 @@ const Forth = styled.div`
 `;
 
 const ForthContent = styled.div`
+  margin-bottom: 60px;
   text-align: center;
 `;
 
@@ -208,6 +214,7 @@ const Fifth = styled.div`
 `;
 
 const FifthContent = styled.div`
+  margin-bottom: 60px;
   text-align: center;
 `;
 

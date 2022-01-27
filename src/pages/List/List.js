@@ -23,15 +23,7 @@ function List() {
   const params = useParams();
   const location = useLocation().search;
   const query = new URLSearchParams(location);
-
   const currURL = window.location.search;
-
-  // &size=${params.size}&colorId=${params.colorId}&subBrandName=${
-  //   params.subBrandName
-  // }&subIconName=${params.subIconName}&subClothesName=${
-  //   params.subClothesName
-  // }&subAccessoriesName=${params.subAccessoriesName}
-
   const URL = `${GET_LIST_API}${currURL}`;
 
   const FILTER_URL = `${process.env.REACT_APP_BASE_FRONT_URL}?genderId=${query.get(

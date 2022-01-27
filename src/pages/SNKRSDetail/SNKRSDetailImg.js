@@ -34,6 +34,7 @@ export default function DetailImg() {
 const StyledDetailImg = styled.div`
   padding: 0 10px;
   width: 70%;
+
   @media screen and (max-width: 640px) {
     display: flex;
     justify-content: center;
@@ -58,7 +59,7 @@ const Wrapper = styled.section`
 
 const ImgWrapper = styled.div`
   background: #f2f2f2;
-  width: 500px;
+  width: 100%;
   height: 500px;
   overflow: hidden;
   display: flex;

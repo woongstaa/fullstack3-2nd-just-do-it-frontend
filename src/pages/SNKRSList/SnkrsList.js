@@ -34,7 +34,7 @@ function SnkrsList() {
                 onMouseEnter={() => setBtnActive(true)}
                 onMouseLeave={() => setBtnActive(false)}
               >
-                <Link to={`/snkrs/detail/${e.style_code}`}>
+                <a href={`/snkrs/detail/${e.style_code}`}>
                   <div className="imgWrapper">
                     <img src={e.imgUrl} alt={e.snkrsName} />
                   </div>
@@ -42,7 +42,7 @@ function SnkrsList() {
                     {e.is_open ? <div className="draw">Draw!</div> : <div>Commig soon</div>}
                     <div className="itemName">{e.snkrsName}</div>
                   </div>
-                </Link>
+                </a>
               </div>
             );
           })}
