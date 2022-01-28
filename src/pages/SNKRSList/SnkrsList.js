@@ -1,14 +1,12 @@
 import Footer from '../../components/Footer';
 import styled from 'styled-components';
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { GET_SNKRS_LIST_API } from '../../config';
 import SnkrsTop from './SnkrsTop';
 
 function SnkrsList() {
   const [grid, setGrid] = useState(true);
-  const [btnActive, setBtnActive] = useState(false);
 
   const [listData, setListData] = useState([]);
 
@@ -28,12 +26,7 @@ function SnkrsList() {
         <div className={grid ? 'listCard' : 'changedListCard'}>
           {listData.map((e, i) => {
             return (
-              <div
-                className="cardWrapper"
-                key={i}
-                onMouseEnter={() => setBtnActive(true)}
-                onMouseLeave={() => setBtnActive(false)}
-              >
+              <div className="cardWrapper" key={i}>
                 <a href={`/snkrs/detail/${e.style_code}`}>
                   <div className="imgWrapper">
                     <img src={e.imgUrl} alt={e.snkrsName} />

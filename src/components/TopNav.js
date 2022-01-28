@@ -1,7 +1,8 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import styled from 'styled-components';
 import { SiNike } from 'react-icons/si';
 import { FiSearch, FiHeart, FiShoppingBag, FiMenu } from 'react-icons/fi';
-import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useRef, useState } from 'react';
 import MenModal from './Modals/MenModal';
 import WomenModal from './Modals/WomenModal';
@@ -55,6 +56,7 @@ function TopNav() {
   const searching = event => {
     navigate(`/list?search=${keyword}`);
   };
+
   return (
     <>
       {menModalOn ? <MenModal setMenModalOn={setMenModalOn} /> : null}

@@ -99,6 +99,7 @@ const SnsSignUp = styled.div`
 
     .kakao {
       background-color: #feec34;
+      cursor: pointer;
 
       .kakaoIcon {
         vertical-align: -10%;

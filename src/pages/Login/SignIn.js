@@ -1,14 +1,12 @@
 import styled from 'styled-components';
 import { SiNike } from 'react-icons/si';
 import { RiKakaoTalkFill } from 'react-icons/ri';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useEffect, useRef } from 'react';
 import { REDIRECT_URI, REST_API_KEY } from '../../config';
 
 function SignIn({ modal, setModal }) {
   const kauthUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
-
-  const navigate = useNavigate();
 
   const currentRef = useRef();
 
@@ -27,6 +25,7 @@ function SignIn({ modal, setModal }) {
       setModal(true);
     }
   };
+
   return (
     <SignInWrapper>
       <div className="modal">
@@ -142,20 +141,23 @@ const SignInWrapper = styled.div`
 
       button {
         width: 100%;
-        margin-bottom: 5px;
+        margin-bottom: 15px;
         border: none;
         padding: 10px;
         background-color: #f2f2f2;
+        cursor: pointer;
       }
 
       a {
+        padding: 0;
+        margin: 0;
         width: 100%;
-        margin-bottom: 10px;
-        border: none;
-        padding: 10px;
 
         .kakao {
           background-color: #feec34;
+          margin-bottom: 10px;
+          border: none;
+          padding: 10px;
 
           .kakaoIcon {
             vertical-align: -10%;
