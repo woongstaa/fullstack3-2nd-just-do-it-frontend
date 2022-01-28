@@ -18,6 +18,7 @@ export default function SNKRSDetailInfo() {
     axios
       .get(`${process.env.REACT_APP_BASE_URL}/snkrs/detail/${params.styleCode}`)
       .then(res => setData(res.data.data));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // 드로우
@@ -62,6 +63,7 @@ export default function SNKRSDetailInfo() {
         style_code: params.styleCode,
       })
       .then(res => setUserData(res.data.data));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [openModal]);
 
   return (

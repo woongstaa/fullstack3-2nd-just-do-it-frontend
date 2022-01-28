@@ -11,6 +11,7 @@ export default function DetailImg() {
     axios
       .get(`${process.env.REACT_APP_BASE_URL}/snkrs/detail/${params.styleCode}`)
       .then(res => setMockdata(res.data.data.img));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

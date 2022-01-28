@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
 import ColorFilter from './filter/ColorFilter';
 import SizeFilter from './filter/SizeFilter';
 import BrandFilter from './filter/BrandFilter';

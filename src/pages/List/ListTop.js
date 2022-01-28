@@ -2,7 +2,6 @@ import styled from 'styled-components';
 import { AiOutlineControl } from 'react-icons/ai';
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/md';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
 
 function ListTop({ filter, setFilter, query, sortMethod, setSortMethod }) {
   const [upDown, setUpDown] = useState(false);

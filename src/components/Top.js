@@ -1,7 +1,7 @@
 import { SiJordan } from 'react-icons/si';
 import { GiConverseShoe } from 'react-icons/gi';
 import styled from 'styled-components';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import SignIn from '../pages/Login/SignIn';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
@@ -9,7 +9,6 @@ import { POST_MEMBER_API } from '../config';
 
 function Top() {
   const [modal, setModal] = useState(false);
-  const [name, setName] = useState();
   const user_id = localStorage.getItem('token');
 
   const makeMember = () => {

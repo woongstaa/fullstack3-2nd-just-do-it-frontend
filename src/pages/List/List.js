@@ -8,14 +8,14 @@ import ListFilterCard from './ListFilterCard';
 import { useEffect, useState } from 'react';
 import { GET_LIST_API } from '../../config';
 import axios from 'axios';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 function List() {
   const [filter, setFilter] = useState(true);
   const [listData, setListData] = useState([]);
   const [sortMethod, setSortMethod] = useState(0);
 
-  const params = useParams();
+  // const params = useParams();
   const location = useLocation().search;
   const query = new URLSearchParams(location);
   const currURL = window.location.search;
