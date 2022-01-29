@@ -1,21 +1,12 @@
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import styled, { css, keyframes } from 'styled-components';
+import styled, { css } from 'styled-components';
 import axios from 'axios';
 import { GrFormClose } from 'react-icons/gr';
 import { IoIosArrowDown } from 'react-icons/io';
 import StarRatings from 'react-star-ratings';
 import Slider from 'react-input-slider';
-
-const rotate = keyframes`
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(180deg);
-  }
-`;
 
 const DetailInfos = styled.div`
   width: 25vw;
@@ -74,6 +65,7 @@ const ProductSize = styled.div`
     text-decoration: none;
     color: gray;
     font-weight: 300;
+    cursor: text;
   }
 `;
 
@@ -228,11 +220,11 @@ const ReviewHeader = styled.div`
 
     .rotateIcon {
       cursor: pointer;
-      animation: ${props =>
-        props.visible &&
-        css`
-          ${rotate} 0.3s linear
-        `};
+      transform: rotate(0turn);
+    }
+
+    .rotateIcon.active {
+      transform: rotate(0.5turn);
     }
   }
 `;
@@ -279,6 +271,7 @@ const SideCart = styled.nav`
     left: 0;
     opacity: 0;
   }
+
   .backBlur.active {
     position: fixed;
     z-index: 1000;
@@ -297,6 +290,7 @@ const SideCart = styled.nav`
     transition: 850ms;
     opacity: 0;
   }
+
   .sideCart.active {
     opacity: 1;
     right: 0;
@@ -359,6 +353,7 @@ const SideCartTotalPrice = styled.div`
     color: gray;
     font-weight: 300;
   }
+
   div {
     color: #fa7634;
     font-size: 30px;
@@ -403,6 +398,11 @@ const DeleteAllCart = styled.span`
 
   button {
     display: inline-block;
+    background: white;
+
+    &:hover {
+      background: #e5e5e5;
+    }
   }
 `;
 
@@ -661,8 +661,7 @@ export default function DetailInfo() {
               onClick={() => {
                 setVisible(prev => !prev);
               }}
-              className="rotateIcon"
-              // visible={visible}
+              className={visible ? 'rotateIcon active' : 'rotateIcon'}
             />
           </span>
         </ReviewHeader>

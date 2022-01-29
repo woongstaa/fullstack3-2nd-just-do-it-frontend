@@ -7,20 +7,19 @@ import Footer from '../../components/Footer';
 
 const DetailSection = styled.section`
   display: flex;
-  margin: 20px 200px;
+  margin: 20px 10vw;
   font-family: ${({ theme }) => theme.fontContent};
 `;
+
 function Detail() {
   return (
     <div className="Detail">
       <Top />
       <TopNav />
-      <div className="detail">
-        <DetailSection>
-          <DetailImg />
-          <DetailInfo />
-        </DetailSection>
-      </div>
+      <DetailSection>
+        <DetailImg />
+        <DetailInfo />
+      </DetailSection>
       <Footer />
     </div>
   );
