@@ -1,21 +1,10 @@
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import styled, { css, keyframes } from 'styled-components';
-import axios from 'axios';
+import styled from 'styled-components';
 import { GrFormClose } from 'react-icons/gr';
 import { IoIosArrowDown } from 'react-icons/io';
 import StarRatings from 'react-star-ratings';
 import Slider from 'react-input-slider';
-
-const rotate = keyframes`
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(180deg);
-  }
-`;
 
 const DetailInfos = styled.div`
   width: 25vw;
@@ -43,13 +32,11 @@ const DetailInfoTitleTop = styled.div`
   }
 `;
 
-const DetailInfoTitle = styled.div`
+const DetailInfoTitle = styled.h1`
   margin: 30px auto;
 
-  h1 {
-    font-size: 30px;
-    font-weight: 600;
-  }
+  font-size: 30px;
+  font-weight: 600;
 `;
 
 const ProductSaleRate = styled.div`
@@ -64,17 +51,18 @@ const ProductSize = styled.div`
   display: flex;
   justify-content: space-between;
   text-decoration: none;
-  font-size: 18px;
-
-  strong {
-    font-weight: 600;
-  }
 
   a {
     text-decoration: none;
     color: gray;
     font-weight: 300;
+    cursor: text;
+    font-size: 16px;
   }
+`;
+
+const ProductSizeText = styled.strong`
+  font-size: 18px;
 `;
 
 const ProductSizeTableList = styled.div`
@@ -228,11 +216,11 @@ const ReviewHeader = styled.div`
 
     .rotateIcon {
       cursor: pointer;
-      animation: ${props =>
-        props.visible &&
-        css`
-          ${rotate} 0.3s linear
-        `};
+      transform: rotate(0turn);
+    }
+
+    .rotateIcon.active {
+      transform: rotate(0.5turn);
     }
   }
 `;
@@ -279,6 +267,7 @@ const SideCart = styled.nav`
     left: 0;
     opacity: 0;
   }
+
   .backBlur.active {
     position: fixed;
     z-index: 1000;
@@ -297,6 +286,7 @@ const SideCart = styled.nav`
     transition: 850ms;
     opacity: 0;
   }
+
   .sideCart.active {
     opacity: 1;
     right: 0;
@@ -359,6 +349,7 @@ const SideCartTotalPrice = styled.div`
     color: gray;
     font-weight: 300;
   }
+
   div {
     color: #fa7634;
     font-size: 30px;
@@ -403,19 +394,22 @@ const DeleteAllCart = styled.span`
 
   button {
     display: inline-block;
+    background: white;
+
+    &:hover {
+      background: #e5e5e5;
+    }
   }
 `;
 
-export default function DetailInfo() {
+export default function DetailInfo({ data }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [size, setSize] = useState(0);
   const [deleteOk, setDeleteOk] = useState(1);
-  const params = useParams();
   const userId = localStorage.getItem('token');
   const [visible, setVisible] = useState(false);
   const [sidebar, setSidebar] = useState(false);
-  const [data, setData] = useState([]);
   const [clicked, setClicked] = useState(false);
   const [addCart, setAddCart] = useState(false);
   const [comfortState, setComfortState] = useState({ x: 2.5 });
@@ -425,20 +419,14 @@ export default function DetailInfo() {
   const [reviewChange, setReviewChange] = useState(0);
   const [reviewAverage, setReviewAverage] = useState(0);
 
-  useEffect(() => {
-    axios
-      .get(`${process.env.REACT_APP_BASE_URL}/product/detail/${params.styleCode}`)
-      .then(res => setData(res.data.data))
-      .then(setReviewChange(reviewChange + 1));
-  }, []);
-
+  // 특정 사용자의 장바구니 목록 불러오기
   useEffect(() => {
     fetch(`${process.env.REACT_APP_BASE_URL}/cart/list`, {
       method: 'POST',
       mode: 'cors',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        user_id: `${userId}`,
+        user_id: userId,
       }),
     })
       .then(res => res.json())
@@ -449,14 +437,15 @@ export default function DetailInfo() {
       });
   }, [deleteOk, userId]);
 
+  // 별점을 서버에 보내기
   const sendReview = () => {
     fetch(`${process.env.REACT_APP_BASE_URL}/user/review`, {
       method: 'POST',
       mode: 'cors',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        user_id: `${userId}`,
-        styleCode: `${data.style_code}`,
+        user_id: userId,
+        styleCode: data.style_code,
         size: sizeState.x,
         color: colorState.x,
         width: widthState.x,
@@ -477,13 +466,14 @@ export default function DetailInfo() {
       });
   };
 
+  // 특정 용품의 별점 최신화
   useEffect(() => {
     fetch(`${process.env.REACT_APP_BASE_URL}/user/reviewAverage`, {
       method: 'POST',
       mode: 'cors',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        styleCode: `${data.style_code}`,
+        styleCode: data.style_code,
       }),
     })
       .then(res => res.json())
@@ -493,6 +483,7 @@ export default function DetailInfo() {
       });
   }, [data, reviewChange, reviewAverage]);
 
+  // 장바구니 목록 중 한 품목만 삭제
   const deleteCart = (userId, cart_id) => {
     fetch(`${process.env.REACT_APP_BASE_URL}/cart`, {
       method: 'delete',
@@ -501,7 +492,7 @@ export default function DetailInfo() {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        user_id: `${userId}`,
+        user_id: userId,
         cart_id: cart_id,
       }),
     }).then(() => {
@@ -509,6 +500,7 @@ export default function DetailInfo() {
     });
   };
 
+  // 장바구니 목록 모두 삭제
   const deleteAllCart = () => {
     fetch(`${process.env.REACT_APP_BASE_URL}/cart`, {
       method: 'delete',
@@ -517,13 +509,14 @@ export default function DetailInfo() {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        user_id: `${userId}`,
+        user_id: userId,
       }),
     }).then(() => {
       setDeleteOk(prev => prev + 1);
     });
   };
 
+  // 사이드바가 열림
   const showSidebar = () => {
     if (activeIndex !== 0) {
       setSidebar(prev => !prev);
@@ -545,10 +538,10 @@ export default function DetailInfo() {
       mode: 'cors',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        user_id: `${userId}`,
+        user_id: userId,
         quantity: quantity,
-        style_code: `${data.style_code}`,
-        size: `${size}`,
+        style_code: data.style_code,
+        size: size,
       }),
     })
       .then(res => res.json())
@@ -571,29 +564,23 @@ export default function DetailInfo() {
   };
   return (
     <DetailInfos>
-      <div className="productDetailInfoTitle">
-        <DetailInfoTitleTop>
-          <span className="categoryName">{data.gender}</span>
-          <ul className="productPrice">
-            {data.sale_price ? <li className="productSalePrice">{data.sale_price} 원</li> : null}
-            <li
-              className="productNormalPrice"
-              style={{ textDecoration: data.sale_price ? 'line-through' : 'none' }}
-            >
-              {data.normal_price} 원
-            </li>
-          </ul>
-        </DetailInfoTitleTop>
-        <DetailInfoTitle>
-          <h1>{data.name}</h1>
-        </DetailInfoTitle>
-      </div>
+      <DetailInfoTitleTop>
+        <span>{data.gender}</span>
+        <ul className="productPrice">
+          {data.sale_price ? <li className="productSalePrice">{data.sale_price} 원</li> : null}
+          <li
+            className="productNormalPrice"
+            style={{ textDecoration: data.sale_price ? 'line-through' : 'none' }}
+          >
+            {data.normal_price} 원
+          </li>
+        </ul>
+      </DetailInfoTitleTop>
+      <DetailInfoTitle>{data.name}</DetailInfoTitle>
       {data.sale_rate ? <ProductSaleRate>{data.sale_rate}% off</ProductSaleRate> : null}
       <ProductSize>
-        <strong>사이즈 선택</strong>
-        <div>
-          <Link to="#">사이즈 가이드</Link>
-        </div>
+        <ProductSizeText>사이즈 선택</ProductSizeText>
+        <Link to="#">사이즈 가이드</Link>
       </ProductSize>
       <ProductSizeTableList warn={clicked && activeIndex === 0}>
         {data.info &&
@@ -661,8 +648,7 @@ export default function DetailInfo() {
               onClick={() => {
                 setVisible(prev => !prev);
               }}
-              className="rotateIcon"
-              // visible={visible}
+              className={visible ? 'rotateIcon active' : 'rotateIcon'}
             />
           </span>
         </ReviewHeader>
