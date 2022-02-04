@@ -15,18 +15,11 @@ const StyledDetailImg = styled.div`
 
     column-gap: 10px;
   }
+
   .detailImgWrapper.active {
     display: flex;
     flex-direction: column;
   }
-`;
-
-const Wrapper = styled.section`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
-
-  column-gap: 10px;
 `;
 
 const List = styled.li`
@@ -50,27 +43,29 @@ const ImgWrapper = styled.div`
 `;
 
 export default function DetailImg() {
-  const [mockdata, setMockdata] = useState([]);
+  const [imgData, setImgData] = useState([]);
   const [acc, setAcc] = useState(false);
   const params = useParams();
+
   useEffect(() => {
     axios
       .get(`${process.env.REACT_APP_BASE_URL}/product/detail/${params.styleCode}`)
-      .then(res => setMockdata(res.data.data.img));
+      .then(res => setImgData(res.data.data.img));
   }, []);
+
   useEffect(() => {
-    if (mockdata.length === 2) {
+    if (imgData.length === 2) {
       setAcc(true);
     } else {
       setAcc(false);
     }
-  }, [mockdata]);
+  }, [imgData]);
 
   return (
     <StyledDetailImg>
       <div className={acc ? 'detailImgWrapper active' : 'detailImgWrapper'}>
-        {mockdata &&
-          mockdata.map(obj => {
+        {imgData &&
+          imgData.map(obj => {
             return (
               <List key={obj.url}>
                 <ImgWrapper>
