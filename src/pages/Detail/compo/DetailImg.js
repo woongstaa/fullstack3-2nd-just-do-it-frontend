@@ -1,19 +1,25 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 const StyledDetailImg = styled.div`
-  width: calc(100% - 449px);
+  width: calc(100% - 25vw);
   position: relative;
   padding: 0 10px;
-`;
 
-const Wrapper = styled.section`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
+  .detailImgWrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
 
-  column-gap: 10px;
+    column-gap: 10px;
+  }
+
+  .detailImgWrapper.active {
+    display: flex;
+    flex-direction: column;
+  }
 `;
 
 const List = styled.li`
@@ -27,35 +33,48 @@ const List = styled.li`
 `;
 
 const ImgWrapper = styled.div`
-  position: relative;
+  display: flex;
+  justify-content: center;
   width: 100%;
 
   img {
-    width: 100%;
     background: #f2f2f2;
   }
 `;
 
 export default function DetailImg() {
-  const [mockdata, setMockdata] = useState([]);
+  const [imgData, setImgData] = useState([]);
+  const [acc, setAcc] = useState(false);
+  const params = useParams();
+
   useEffect(() => {
-    axios.get('data/shoedata.json').then(res => setMockdata(res.data.data.img));
+    axios
+      .get(`${process.env.REACT_APP_BASE_URL}/product/detail/${params.styleCode}`)
+      .then(res => setImgData(res.data.data.img));
   }, []);
+
+  useEffect(() => {
+    if (imgData.length === 2) {
+      setAcc(true);
+    } else {
+      setAcc(false);
+    }
+  }, [imgData]);
 
   return (
     <StyledDetailImg>
-      <Wrapper>
-        {mockdata &&
-          mockdata.map(obj => {
+      <div className={acc ? 'detailImgWrapper active' : 'detailImgWrapper'}>
+        {imgData &&
+          imgData.map(obj => {
             return (
-              <List key={obj.name}>
+              <List key={obj.url}>
                 <ImgWrapper>
-                  <img src={obj.name} alt={obj.name} />
+                  <img src={obj.url} alt={obj.url} style={{ width: acc ? '50%' : '100%' }} />
                 </ImgWrapper>
               </List>
             );
           })}
-      </Wrapper>
+      </div>
     </StyledDetailImg>
   );
 }

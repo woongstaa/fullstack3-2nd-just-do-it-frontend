@@ -1,37 +1,62 @@
 import styled from 'styled-components';
 import { SiNike } from 'react-icons/si';
+import { RiKakaoTalkFill } from 'react-icons/ri';
 import { Link } from 'react-router-dom';
+import { useEffect, useRef } from 'react';
+import { REDIRECT_URI, REST_API_KEY } from '../../config';
 
-function SignIn({ setModal }) {
+function SignIn({ modal, setModal }) {
+  const kauthUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
+
+  const currentRef = useRef();
+
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  });
+
+  const handleClickOutside = event => {
+    if (currentRef && !currentRef.current.contains(event.target)) {
+      setModal(false);
+    } else {
+      setModal(true);
+    }
+  };
+
   return (
     <SignInWrapper>
-      <div className="modal" onClick={() => setModal(false)}>
-        <div className="modalAni">
-          <div className="modalWrapper">
-            <div>
-              <SiNike className="icon" />
+      <div className="modal">
+        <div className="modalWrapper" ref={currentRef} defaultValue={modal}>
+          <div>
+            <SiNike className="icon" />
+          </div>
+          <div className="modalTitle">나이키 로그인</div>
+          <div className="inputWrapper">
+            <input placeholder="아이디" />
+            <input placeholder="비밀번호" type="password" />
+          </div>
+          <div className="inputFooter">
+            <div className="checkBox">
+              <input type="checkbox" />
+              로그인 유지하기
             </div>
-            <div className="modalTitle">나이키 로그인</div>
-            <div className="inputWrapper">
-              <input placeholder="아이디" />
-              <input placeholder="비밀번호" type="password" />
-            </div>
-            <div className="inputFooter">
-              <div className="checkBox">
-                <input type="checkbox" />
-                로그인 유지하기
-              </div>
-              <div>아이디/비밀번호 찾기</div>
-            </div>
-            <button className="normal">로그인</button>
-            <button>카카오 로그인</button>
-            <button>페이스북 로그인</button>
-            <div className="goSignUp">
-              회원이 아니신가요?{' '}
-              <Link to="/signup">
-                <span>회원가입</span>
-              </Link>
-            </div>
+            <div>아이디/비밀번호 찾기</div>
+          </div>
+          <button className="normal">로그인</button>
+          <a href={kauthUrl}>
+            <button className="kakao">
+              <RiKakaoTalkFill className="kakaoIcon" />
+              카카오톡 로그인
+            </button>
+          </a>
+          <div className="goSignUp">
+            회원이 아니신가요?{' '}
+            <Link to="/signup">
+              <span>회원가입</span>
+            </Link>
           </div>
         </div>
       </div>
@@ -40,6 +65,8 @@ function SignIn({ setModal }) {
 }
 
 const SignInWrapper = styled.div`
+  font-family: ${props => props.theme.fontContent};
+
   .modal {
     position: fixed;
     top: 0;
@@ -92,38 +119,58 @@ const SignInWrapper = styled.div`
 
         input {
           margin-bottom: 16px;
-          font-size: 16px;
-          padding: 6px;
-          border: 1px solid gainsboro;
+          font-size: 12px;
+          padding: 10px;
+          border: 1px solid #dfdfdf;
         }
       }
+
       .inputFooter {
         width: 100%;
         display: flex;
         justify-content: space-between;
         font-size: 12px;
         margin-bottom: 20px;
+        color: #979797;
 
         .checkBox {
           display: flex;
           align-items: center;
         }
       }
+
       button {
         width: 100%;
-        margin-bottom: 10px;
+        margin-bottom: 15px;
         border: none;
         padding: 10px;
+        background-color: #f2f2f2;
+        cursor: pointer;
       }
-      .normal {
-        background-color: black;
-        color: white;
+
+      a {
+        padding: 0;
+        margin: 0;
+        width: 100%;
+
+        .kakao {
+          background-color: #feec34;
+          margin-bottom: 10px;
+          border: none;
+          padding: 10px;
+
+          .kakaoIcon {
+            vertical-align: -10%;
+            margin-right: 10px;
+            font-size: 16px;
+          }
+        }
       }
 
       .goSignUp {
         margin-top: 10px;
         font-size: 12px;
-        color: gray;
+        color: #979797;
 
         a {
           color: black;

@@ -41,6 +41,11 @@ function SaleModal({ setSaleModalOn }) {
 const Modal = styled.div`
   font-family: ${props => props.theme.fontContent};
 
+  a {
+    text-decoration: none;
+    cursor: pointer;
+  }
+
   .modal {
     position: fixed;
     top: 80px;

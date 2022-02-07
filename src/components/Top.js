@@ -3,35 +3,64 @@ import { GiConverseShoe } from 'react-icons/gi';
 import styled from 'styled-components';
 import { useState } from 'react';
 import SignIn from '../pages/Login/SignIn';
+import { Link } from 'react-router-dom';
+import axios from 'axios';
+import { POST_MEMBER_API } from '../config';
 
 function Top() {
   const [modal, setModal] = useState(false);
+  const user_id = localStorage.getItem('token');
+
+  const makeMember = () => {
+    axios
+      .post(POST_MEMBER_API, {
+        user_id: user_id,
+      })
+      .then(() => {
+        alert('프리미엄 회원이 되신 것을 축하드립니다!');
+      })
+      .catch(() => {
+        alert('이미 프리미엄 회원입니다!');
+      });
+  };
+
+  const logOut = () => {
+    localStorage.removeItem('token');
+    window.location.reload();
+  };
 
   return (
     <>
-      {modal && <SignIn setModal={setModal} />}
-      <TopWarpper>
+      {modal && <SignIn modal={modal} setModal={setModal} />}
+      <TopWrapper>
         <TopLeft>
           <SiJordan className="icon" />
           <GiConverseShoe className="icon" />
         </TopLeft>
         <TopRight>
           <li>고객센터</li>
-          <li>멤버 가입</li>
-          <li>프리미엄 멤버 가입</li>
-          <li onClick={() => setModal(true)}>로그인</li>
+          <Link to="/signup">
+            <li>멤버 가입</li>
+          </Link>
+          <li onClick={makeMember}>프리미엄 멤버 가입</li>
+          {/* {user_id ? <li>{name}님</li> : <li onClick={() => setModal(true)}>로그인</li>} */}
+          {user_id ? (
+            <li onClick={() => logOut()}>로그아웃</li>
+          ) : (
+            <li onClick={() => setModal(true)}>로그인</li>
+          )}
         </TopRight>
-      </TopWarpper>
+      </TopWrapper>
     </>
   );
 }
 
-const TopWarpper = styled.div`
+const TopWrapper = styled.div`
   box-sizing: border-box;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: gainsboro;
+  background-color: #f2f2f2;
   padding: 0.5vh 3vw;
   font-family: ${props => props.theme.fontContent};
 
@@ -54,6 +83,12 @@ const TopRight = styled.ul`
   li {
     padding-left: 1vw;
     font-size: 0.8rem;
+    cursor: pointer;
+  }
+
+  a {
+    text-decoration: none;
+    color: black;
   }
 `;
 

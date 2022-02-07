@@ -3,17 +3,55 @@ import { AiOutlineControl } from 'react-icons/ai';
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/md';
 import { useState } from 'react';
 
-function ListTop({ filter, setFilter }) {
+function ListTop({ filter, setFilter, query, sortMethod, setSortMethod }) {
   const [upDown, setUpDown] = useState(false);
+  const [filterModal, setFilterModal] = useState(false);
+  const [cate, setCate] = useState();
+  const [gender, setGender] = useState();
+  const [sortName, setSortName] = useState('신상품순');
+
+  useState(() => {
+    if (query.get('categoryId') === '1') {
+      setCate('신발');
+    } else if (query.get('categoryId') === '2') {
+      setCate('의류');
+    } else if (query.get('categoryId') === '3') {
+      setCate('용품');
+    } else {
+      setCate('전체');
+    }
+  }, []);
+
+  useState(() => {
+    if (query.get('genderId') === '1') {
+      setGender("Mens'");
+    } else if (query.get('genderId') === '2') {
+      setGender("Womens'");
+    } else if (query.get('genderId') === '3') {
+      setGender("Kids'");
+    }
+  }, []);
+
+  const makeModal = () => {
+    setUpDown(prev => !prev);
+    setFilterModal(prev => !prev);
+  };
+
+  const makeSort = (id, name) => {
+    setSortMethod(id);
+    setSortName(name);
+  };
 
   return (
     <TopWrapper>
       <div className="topLeft">
         <div className="subTitle">
-          <span>신발</span>
+          <span>{cate}</span>
         </div>
         <div className="mainTitle">
-          <span>Men's 신발(445)</span>
+          <span>
+            {gender} {cate}
+          </span>
         </div>
       </div>
       <div className="topRight">
@@ -21,13 +59,26 @@ function ListTop({ filter, setFilter }) {
           필터
           <AiOutlineControl className="icon" />
         </div>
-        <div className="sort" onClick={() => setUpDown(!upDown)}>
-          신상품순
-          {upDown ? (
-            <MdKeyboardArrowUp className="icon" />
-          ) : (
-            <MdKeyboardArrowDown className="icon" />
-          )}
+        <div className="sortBox" onClick={makeModal}>
+          <div className="sort">
+            {sortName}
+            {upDown ? (
+              <MdKeyboardArrowUp className="icon" />
+            ) : (
+              <MdKeyboardArrowDown className="icon" />
+            )}
+          </div>
+          {filterModal ? (
+            <FilterModal>
+              {sort.map((e, i) => {
+                return (
+                  <div className="sortWrapper" key={e.id} onClick={() => makeSort(e.id, e.name)}>
+                    <div>{e.name}</div>
+                  </div>
+                );
+              })}
+            </FilterModal>
+          ) : null}
         </div>
       </div>
     </TopWrapper>
@@ -62,10 +113,54 @@ const TopWrapper = styled.div`
       margin-right: 30px;
       cursor: pointer;
     }
-    .sort {
-      cursor: pointer;
+    .sortBox {
+      position: relative;
+      .sort {
+        cursor: pointer;
+      }
     }
   }
 `;
 
+const FilterModal = styled.div`
+  position: absolute;
+  background-color: #fff;
+  width: 100px;
+  border-radius: 10px;
+  padding: 14px;
+  right: 0;
+  text-align: right;
+  z-index: 200;
+
+  div {
+    margin: 10px 0;
+  }
+`;
+
+const sort = [
+  {
+    id: 1,
+    name: '신상품순',
+  },
+  {
+    id: 2,
+    name: '리뷰 많은 순',
+  },
+  {
+    id: 3,
+    name: '이름순',
+  },
+  {
+    id: 4,
+    name: '할인률순',
+  },
+  {
+    id: 5,
+    name: '낮은 가격 순',
+  },
+  {
+    id: 6,
+    name: '높은 가격 순',
+  },
+];
 export default ListTop;

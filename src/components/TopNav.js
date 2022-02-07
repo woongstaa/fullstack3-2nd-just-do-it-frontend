@@ -1,7 +1,8 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import styled from 'styled-components';
 import { SiNike } from 'react-icons/si';
 import { FiSearch, FiHeart, FiShoppingBag, FiMenu } from 'react-icons/fi';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useRef, useState } from 'react';
 import MenModal from './Modals/MenModal';
 import WomenModal from './Modals/WomenModal';
@@ -26,7 +27,9 @@ function TopNav() {
   const [kidModalOn, setKidModalOn] = useState(false);
   const [saleModalOn, setSaleModalOn] = useState(false);
 
-  // useEffect({}, [menModalOn, womenModalOn, kidModalOn, saleModalOn]);
+  const [keyword, setKeyword] = useState();
+  const navigate = useNavigate();
+
   const [hide, setHide] = useState(false);
   const [pageY, setPageY] = useState(0);
   const documentRef = useRef(document);
@@ -38,6 +41,7 @@ function TopNav() {
     setHide(hide);
     setPageY(pageYOffset);
   };
+
   const throttleScroll = throttle(handleScroll, 50);
 
   useEffect(() => {
@@ -45,10 +49,16 @@ function TopNav() {
     return () => documentRef.current.removeEventListener('scroll', throttleScroll);
   }, [pageY]);
 
+  const keywordInput = event => {
+    setKeyword(event.target.value);
+  };
+
+  const searching = event => {
+    navigate(`/list?search=${keyword}`);
+  };
+
   return (
     <>
-      {console.log(hide)}
-      {console.log(pageY)}
       {menModalOn ? <MenModal setMenModalOn={setMenModalOn} /> : null}
       {womenModalOn ? <WomenModal setWomenModalOn={setWomenModalOn} /> : null}
       {kidModalOn ? <KidModal setKidModalOn={setKidModalOn} /> : null}
@@ -65,15 +75,26 @@ function TopNav() {
               <Link to="/snkrs">
                 <div>SNKRS</div>
               </Link>
-              <div onMouseEnter={() => setMenModalOn(true)}>MEN</div>
-              <div onMouseOver={() => setWomenModalOn(true)}>WOMEN</div>
-              <div onMouseOver={() => setKidModalOn(true)}>KID</div>
+              <a href="/list?genderId=1">
+                <div onMouseEnter={() => setMenModalOn(true)}>MEN</div>
+              </a>
+              <a href="/list?genderId=2">
+                <div onMouseOver={() => setWomenModalOn(true)}>WOMEN</div>
+              </a>
+              <a href="/list?genderId=3">
+                <div onMouseOver={() => setKidModalOn(true)}>KID</div>
+              </a>
               <div onMouseOver={() => setSaleModalOn(true)}>SALES</div>
             </div>
           </NavCenter>
           <NavRight>
             <span>
-              <input className="search" placeholder="검색" />
+              <input
+                className="search"
+                placeholder="검색"
+                onChange={keywordInput}
+                onKeyPress={() => searching()}
+              />
             </span>
             <button id="searchIcon">
               <FiSearch className="icon" />
@@ -81,9 +102,11 @@ function TopNav() {
             <button>
               <FiHeart className="icon" id="likeBtn" />
             </button>
-            <button>
-              <FiShoppingBag className="icon" id="iconBag" />
-            </button>
+            <a href="/cart">
+              <button>
+                <FiShoppingBag className="icon" id="iconBag" style={{ cursor: 'pointer' }} />
+              </button>
+            </a>
             <button className="iconMobile">
               <FiMenu />
             </button>
@@ -99,7 +122,6 @@ function TopNav() {
 const TopContainer = styled.div`
   position: relative;
   width: 100%;
-  /* height: 80px; */
 `;
 
 const TopNavWrapper = styled.div`
@@ -109,8 +131,6 @@ const TopNavWrapper = styled.div`
   align-items: center;
   padding: 0 3vw;
   position: sticky;
-  /* position: fixed; */
-  /* top: 40px; */
   left: 0;
   height: 80px;
   width: 100%;
@@ -156,51 +176,6 @@ const NavCenter = styled.div`
     }
   }
 
-  /* .main {
-    padding: 10px;
-
-    &::after {
-      content: '';
-      width: 0;
-      height: 10px;
-      position: absolute;
-      left: 1rem;
-      bottom: 0.8em;
-      transition: width 200ms ease-in;
-    }
-
-    &:hover::after,
-    &:focus::after {
-      width: 80%;
-    }
-
-    &:hover ul,
-    &:focus ul {
-      opacity: 1;
-      visibility: visible;
-    }
-
-    .sub {
-      position: absolute;
-      top: 40px;
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-      width: 100vw;
-      opacity: 0;
-      visibility: hidden;
-      transition: opacity 200ms ease-in-out;
-
-      li {
-        padding: 10px;
-
-        &:hover,
-        &:focus {
-          background-color: blue;
-        }
-      }
-    }
-  } */
   @media screen and (max-width: 640px) {
     display: none;
   }
@@ -214,7 +189,7 @@ const NavRight = styled.div`
   .search {
     border-radius: 100px;
     border: none;
-    background-color: gainsboro;
+    background-color: #f2f2f2;
     padding: 8px 40px;
     height: 20px;
     width: 90px;
@@ -236,7 +211,7 @@ const NavRight = styled.div`
     left: 5px;
     top: 5px;
     padding: 0;
-    background-color: gainsboro;
+    background-color: #f2f2f2;
   }
 
   .iconMobile {
