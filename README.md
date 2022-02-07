@@ -63,6 +63,9 @@
 
 [동영상 링크]()
 
+### DB 모델링
+![image (4)](https://user-images.githubusercontent.com/92710433/152798945-7d14b79f-a1c9-4f3b-a50e-84e6a5ba6376.png)
+
 ### 메인 페이지
 <img width="1439" alt="스크린샷 2022-02-07 오후 1 55 04" src="https://user-images.githubusercontent.com/87569550/152726717-08c45ae0-7b35-4dfe-b561-39c25bd377e4.png">
 
