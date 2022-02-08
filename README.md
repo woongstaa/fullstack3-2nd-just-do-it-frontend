@@ -41,6 +41,7 @@
   - 메인페이지 UI
   - Top, Nav, Footer UI
     - Drop-down 스타일의 Nav UI
+    - 검색 키워드 입력시 일치하는 상품 검색 기능
   - 회원가입, 로그인  UI
     - 카카오 로그인 API 활용, SNS 로그인 기능
     - 모달창을 활용한 로그인 UI
