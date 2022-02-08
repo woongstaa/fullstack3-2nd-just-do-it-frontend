@@ -61,7 +61,7 @@
 
 ## 동영상 링크 및 결과물 스크린샷
 
-[동영상 링크]()
+[동영상 링크](https://youtu.be/3guL-Zx5MwM)
 
 ### DB 모델링
 ![image (4)](https://user-images.githubusercontent.com/92710433/152798945-7d14b79f-a1c9-4f3b-a50e-84e6a5ba6376.png)
