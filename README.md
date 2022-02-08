@@ -11,15 +11,15 @@
 - 이진웅
 - 황희윤
 
-###  ⌨️ Back-end
+### ⌨️ Back-end
 
 - 이준혁
 - 김영욱
 
 ## 레포지토리 주소
 
-- [프론트엔드 깃허브](https://github.com/wecode-bootcamp-korea/fullstack3-2nd-just-do-it-frontend)
-- [백엔드 깃허브](https://github.com/wecode-bootcamp-korea/fullstack3-2nd-just-do-it-backend)
+- [프론트엔드 깃허브](https://github.com/woongstaa/fullstack3-2nd-just-do-it-frontend)
+- [백엔드 깃허브](https://github.com/woongstaa/fullstack3-2nd-just-do-it-backend)
 
 ## 사용한 기술 스택
 
@@ -86,18 +86,20 @@
   - 유저 인증 인가 Middleware
     - 회원 비회원 여부를 Middleware를 통해 인가 권한 부여 (Router 내의 Middleware 적용)
 
-
 ## 동영상 링크 및 결과물 스크린샷
 
 [동영상 링크](https://youtu.be/3guL-Zx5MwM)
 
 ### DB 모델링
+
 ![image (4)](https://user-images.githubusercontent.com/92710433/152798945-7d14b79f-a1c9-4f3b-a50e-84e6a5ba6376.png)
 
 ### 메인 페이지
+
 <img width="1439" alt="스크린샷 2022-02-07 오후 1 55 04" src="https://user-images.githubusercontent.com/87569550/152726717-08c45ae0-7b35-4dfe-b561-39c25bd377e4.png">
 
-### 헤더 
+### 헤더
+
 <img width="1437" alt="스크린샷 2022-02-07 오후 1 55 18" src="https://user-images.githubusercontent.com/87569550/152726739-76347291-686c-4d6c-92d1-cb541c265fb2.png">
 
 ### 상품 목록(리스트) 페이지
@@ -120,7 +122,6 @@
 
 <img width="1440" alt="스크린샷 2022-02-07 오후 3 49 33" src="https://user-images.githubusercontent.com/87569550/152738975-c2c01e90-0f51-4388-8895-ed05caaaa51a.png">
 
-
 ### 회원가입 & 로그인
 
 - 회원가입은 기존에 사용자 정보를 사용자가 직접 입력하는 방식이 아니라 소셜 로그인으로 카카오톡 계정을 통해서 회원가입을 하는 방식을 만들었습니다.
@@ -142,7 +143,3 @@
 - 스니커즈는 특정한 시간에 사람들이 약 30분간 추첨을 하고, 이 후 시간이 지나면 추첨이 끝나면서 당첨을 확인할 수 있는 페이지입니다.
 
 <img width="1440" alt="스크린샷 2022-02-07 오후 4 11 18" src="https://user-images.githubusercontent.com/87569550/152749238-6bd1a833-603b-44f2-b215-256545758d9d.png">
-
-
-
-
