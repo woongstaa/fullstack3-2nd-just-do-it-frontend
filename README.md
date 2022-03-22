@@ -37,7 +37,7 @@
 
 ## 구현 기능
 
-- **이진웅**
+- 이진웅
   - 메인페이지 UI
   - Top, Nav, Footer UI
     - Drop-down 스타일의 Nav UI
