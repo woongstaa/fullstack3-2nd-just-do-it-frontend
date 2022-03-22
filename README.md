@@ -37,7 +37,7 @@
 
 ## 구현 기능
 
-- 이진웅
+- **이진웅**
   - 메인페이지 UI
   - Top, Nav, Footer UI
     - Drop-down 스타일의 Nav UI
@@ -51,40 +51,7 @@
   - SNKRS 페이지 UI
     - Flex, Grid를 활용한 레이아웃 구성
   - SNKRS 디테일 페이지 UI
-    - 백엔드와의 통신을 통한 추첨 기능
-
-- 황희윤
-  - 디테일 페이지 프론트엔드
-    - 장바구니 기능
-    - 리뷰(별점 기능)  
-
-- 이준혁
-
-  - Draw API
-    - node-cron을 활용한 시간제어 추첨기능
-  - Detail API
-    - JSON을 통해 쿼리문으로 데이터 가공
-  - Cart API
-    - resetful 관점에서 기능구현
-    - 다양한 예외처리 기능
-  - Search API
-    - 와일트카드를 활용한 검색기능
-  - MiddleWare
-    - 다양한 예외처리 기능
-
-- 김영욱
-  - 리스트 페이지 API
-    - 카테고리에 따라 분류된 모든 제품 Read (Read of CRUD)
-  - 필터 API
-    - Query Parameter를 통해 받아온 정보(색상,사이즈,브랜드 등)의 필터링 기능 구현
-  - 소셜 로그인 연동 (카카오 로그인 API)
-    - kakao developers 공식문서 활용
-    - REST API KEY, Access Token 활용
-  - 리뷰 API
-    - Token으로 받은 UserId와 제품의 StyleCode에 따른 리뷰 기능 구성
-    - 리뷰 작성 기능과, 작성된 리뷰 데이터의 평균치를 반환 (Create & Read OF CRUD)
-  - 유저 인증 인가 Middleware
-    - 회원 비회원 여부를 Middleware를 통해 인가 권한 부여 (Router 내의 Middleware 적용)
+    - 백엔드와의 통신을 통한 추첨 기능**
 
 ## 동영상 링크 및 결과물 스크린샷
 
